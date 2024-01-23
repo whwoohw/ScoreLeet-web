@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-bottom: 30px;
+  margin-top: 20px;
 `;
 
 export const TableTitleContainer = styled.div`

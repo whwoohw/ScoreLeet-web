@@ -1,6 +1,6 @@
 import * as S from "@/pages/home/home.styled";
 
-import AnswerTable from "@/components/tables/table";
+import AnswerTable from "@/components/table/table";
 import { LeetTypes, LeetYears } from "@/types/leetAnswers";
 import {
   Alert,
@@ -91,12 +91,12 @@ export default function Home() {
           isMobile
             ? {
                 width: "100%",
-                height: "fit-content",
+                height: "max-content",
                 fontSize: "10.5px",
               }
             : {
                 display: "flex",
-                width: "fit-content",
+                width: "max-content",
                 fontSize: "14px",
               }
         }
@@ -108,13 +108,36 @@ export default function Home() {
         title={"언어이해"}
         answers={language[leetYear][leetType]}
         scores={languageScore[leetYear]}
+        leetYear={leetYear}
+        leetType={leetType}
       />
 
       <AnswerTable
         title={"추리논증"}
         answers={reasoning[leetYear][leetType]}
         scores={reasoningScore[leetYear]}
+        leetYear={leetYear}
+        leetType={leetType}
       />
+
+      <Alert
+        severity="warning"
+        sx={
+          isMobile
+            ? {
+                width: "100%",
+                height: "max-content",
+                fontSize: "10.5px",
+              }
+            : {
+                display: "flex",
+                width: "max-content",
+                fontSize: "14px",
+              }
+        }
+      >
+        혹시 에러나 문의사항이 있으시다면, hyhan1114@snu.ac.kr 로 메일주세요!
+      </Alert>
     </S.Wrapper>
   );
 }

@@ -5,7 +5,7 @@ export const Wrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 50px;
+  gap: 40px;
 `;
 
 export const SelectGroupContainer = styled.div`

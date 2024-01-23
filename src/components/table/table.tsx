@@ -1,15 +1,20 @@
-import * as S from "@/components/tables/table.styles";
+import * as S from "@/components/table/table.styles";
 import { Button, useMediaQuery } from "@mui/material";
 
 import { useEffect, useRef, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import { LeetScores } from "@/types/leetScores";
+import { Timestamp, addDoc, collection } from "firebase/firestore";
+import { db } from "@/utils/firebase";
+import { LeetTypes, LeetYears } from "@/types/leetAnswers";
 
 interface TableProps {
   title: string;
   answers: number[];
   scores: LeetScores;
+  leetYear: LeetYears;
+  leetType: LeetTypes;
 }
 
 const countMatchingElements = (
@@ -27,7 +32,13 @@ const countMatchingElements = (
   return count;
 };
 
-export default function AnswerTable({ title, answers, scores }: TableProps) {
+export default function AnswerTable({
+  title,
+  answers,
+  scores,
+  leetYear,
+  leetType,
+}: TableProps) {
   const isMobile = useMediaQuery("(max-width: 600px)");
 
   const inputRefs = useRef(new Array(answers.length));
@@ -62,22 +73,145 @@ export default function AnswerTable({ title, answers, scores }: TableProps) {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!isSubmit) {
       const indexOfUndefined = answerInputs.indexOf(undefined);
-      if (indexOfUndefined !== -1 || answerInputs.length !== answers.length) {
+      if (indexOfUndefined !== -1) {
+        const updatedAnswerInputs = answerInputs.map((item) =>
+          item === undefined ? null : item
+        );
+        if (updatedAnswerInputs.length !== answers.length) {
+          const updatedArray = Array.from(
+            { length: answers.length },
+            (_, index) => updatedAnswerInputs[index] || null
+          );
+
+          if (
+            window.confirm(
+              `입력되지 않은 답안이 있습니다. 그래도 채점하시겠습니까?`
+            )
+          ) {
+            if (countMatchingElements(answerInputs, answers) > 5) {
+              try {
+                await addDoc(
+                  collection(
+                    db,
+                    "answers",
+                    leetYear + "(" + leetType + ")",
+                    title
+                  ),
+                  {
+                    score: countMatchingElements(answerInputs, answers),
+                    answers: updatedArray,
+                    createdAt: Timestamp.now(),
+                  }
+                );
+              } catch (e) {
+                console.log(e);
+              } finally {
+                setSubmit(true);
+                setScore(countMatchingElements(answerInputs, answers));
+              }
+            } else {
+              setSubmit(true);
+              setScore(countMatchingElements(answerInputs, answers));
+            }
+          }
+        } else {
+          if (
+            window.confirm(
+              `입력되지 않은 답안이 있습니다. 그래도 채점하시겠습니까?`
+            )
+          ) {
+            if (countMatchingElements(answerInputs, answers) > 5) {
+              try {
+                await addDoc(
+                  collection(
+                    db,
+                    "answers",
+                    leetYear + "(" + leetType + ")",
+                    title
+                  ),
+                  {
+                    score: countMatchingElements(answerInputs, answers),
+                    answers: updatedAnswerInputs,
+                    createdAt: Timestamp.now(),
+                  }
+                );
+              } catch (e) {
+                console.log(e);
+              } finally {
+                setSubmit(true);
+                setScore(countMatchingElements(answerInputs, answers));
+              }
+            } else {
+              setSubmit(true);
+              setScore(countMatchingElements(answerInputs, answers));
+            }
+          }
+        }
+      } else if (answerInputs.length !== answers.length) {
+        const updatedArray = Array.from(
+          { length: answers.length },
+          (_, index) => answerInputs[index] || null
+        );
+
         if (
           window.confirm(
             `입력되지 않은 답안이 있습니다. 그래도 채점하시겠습니까?`
           )
         ) {
-          setSubmit(true);
-          setScore(countMatchingElements(answerInputs, answers));
+          if (countMatchingElements(answerInputs, answers) > 5) {
+            try {
+              await addDoc(
+                collection(
+                  db,
+                  "answers",
+                  leetYear + "(" + leetType + ")",
+                  title
+                ),
+                {
+                  score: countMatchingElements(answerInputs, answers),
+                  answers: updatedArray,
+                  createdAt: Timestamp.now(),
+                }
+              );
+            } catch (e) {
+              console.log(e);
+            } finally {
+              setSubmit(true);
+              setScore(countMatchingElements(answerInputs, answers));
+            }
+          } else {
+            setSubmit(true);
+            setScore(countMatchingElements(answerInputs, answers));
+          }
         }
       } else {
-        setSubmit(true);
-        setScore(countMatchingElements(answerInputs, answers));
-        window.alert("채점이 완료되었습니다.");
+        if (countMatchingElements(answerInputs, answers) > 5) {
+          try {
+            await addDoc(
+              collection(db, "answers", leetYear + "(" + leetType + ")", title),
+              {
+                score: countMatchingElements(answerInputs, answers),
+                answers: answerInputs,
+                createdAt: Timestamp.now(),
+              }
+            );
+          } catch (e) {
+            console.log(e);
+          } finally {
+            setSubmit(true);
+            setScore(countMatchingElements(answerInputs, answers));
+
+            window.alert("채점이 완료되었습니다.");
+          }
+        } else {
+          setSubmit(true);
+          setScore(countMatchingElements(answerInputs, answers));
+
+          window.alert("채점이 완료되었습니다.");
+        }
       }
     } else {
       setSubmit(false);
