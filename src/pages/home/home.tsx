@@ -18,6 +18,8 @@ import {
 import { useState } from "react";
 import { language, reasoning } from "@/data/leetAnswers";
 import { languageScore, reasoningScore } from "@/data/leetScores";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "@/utils/firebase";
 
 const leetYears = [
   "2024",
@@ -46,10 +48,12 @@ export default function Home() {
   const [leetType, setLeetType] = useState<LeetTypes>("odd");
 
   const handleChangeYear = (event: SelectChangeEvent) => {
+    logEvent(analytics, `change_year`);
     setLeetYear(event.target.value as LeetYears);
   };
 
   const handleChangeType = (event: React.ChangeEvent<HTMLInputElement>) => {
+    logEvent(analytics, `change_type`);
     setLeetType(event.target.value as LeetTypes);
   };
 

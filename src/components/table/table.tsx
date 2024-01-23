@@ -6,8 +6,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 import { LeetScores } from "@/types/leetScores";
 import { Timestamp, addDoc, collection } from "firebase/firestore";
-import { db } from "@/utils/firebase";
+import { analytics, db } from "@/utils/firebase";
 import { LeetTypes, LeetYears } from "@/types/leetAnswers";
+import { logEvent } from "firebase/analytics";
 
 interface TableProps {
   title: string;
@@ -74,6 +75,7 @@ export default function AnswerTable({
   };
 
   const handleSubmit = async () => {
+    logEvent(analytics, `scoring_button_${title}`);
     if (!isSubmit) {
       const indexOfUndefined = answerInputs.indexOf(undefined);
       if (indexOfUndefined !== -1) {
