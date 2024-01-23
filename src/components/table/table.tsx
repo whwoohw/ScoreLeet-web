@@ -231,7 +231,7 @@ export default function AnswerTable({
   return (
     <S.Wrapper>
       <S.TableTitleContainer>
-        <S.TableTitle>{title}</S.TableTitle>`
+        <S.TableTitle>{title}</S.TableTitle>
         <S.TableScoreContainer>
           <S.TableScoreWrapper>
             <S.TableScoreTitle>정답 문항 수</S.TableScoreTitle>
