@@ -110,11 +110,11 @@ export const languageScore = {
     averageScore: 20.84,
     35: {
       standardScore: 81.8,
-      percentile: null,
+      percentile: 100.0,
     },
     34: {
       standardScore: 79.5,
-      percentile: null,
+      percentile: 100.0,
     },
     33: {
       standardScore: 77.3,
@@ -300,23 +300,23 @@ export const languageScore = {
     averageScore: 20.33,
     35: {
       standardScore: 84.7,
-      percentile: null,
+      percentile: 100.0,
     },
     34: {
       standardScore: 82.4,
-      percentile: null,
+      percentile: 100.0,
     },
     33: {
       standardScore: 80.0,
-      percentile: null,
+      percentile: 100.0,
     },
     32: {
       standardScore: 77.6,
-      percentile: null,
+      percentile: 100.0,
     },
     31: {
       standardScore: 75.3,
-      percentile: null,
+      percentile: 100.0,
     },
     30: {
       standardScore: 72.9,
@@ -584,7 +584,7 @@ export const languageScore = {
     },
     28: {
       standardScore: 57.5,
-      percentile: null,
+      percentile: 76.3,
     },
     27: {
       standardScore: 55.7,
@@ -806,7 +806,7 @@ export const languageScore = {
     },
     16: {
       standardScore: 39.1,
-      percentile: null,
+      percentile: 13.8,
     },
     15: {
       standardScore: 37.2,
@@ -881,7 +881,7 @@ export const languageScore = {
     },
     19: {
       standardScore: 45.8,
-      percentile: null,
+      percentile: 32.7,
     },
     18: {
       standardScore: 43.8,
@@ -889,7 +889,7 @@ export const languageScore = {
     },
     17: {
       standardScore: 41.8,
-      percentile: null,
+      percentile: 20.6,
     },
     averageScore: 21.3,
   },
@@ -944,11 +944,11 @@ export const languageScore = {
     },
     18: {
       standardScore: 52.2,
-      percentile: null,
+      percentile: 57.8,
     },
     17: {
       standardScore: 50.1,
-      percentile: null,
+      percentile: 50.4,
     },
     averageScore: 17.1,
   },
@@ -959,7 +959,7 @@ export const languageScore = {
     },
     29: {
       standardScore: 69.9,
-      percentile: null,
+      percentile: 100.0,
     },
     28: {
       standardScore: 67.9,
@@ -1023,7 +1023,7 @@ export const languageScore = {
     },
     13: {
       standardScore: 36.7,
-      percentile: null,
+      percentile: 20.3,
     },
     12: {
       standardScore: 34.6,
@@ -1121,11 +1121,11 @@ export const languageScore = {
   "2022": {
     30: {
       standardScore: 72.4,
-      percentile: null,
+      percentile: 100.0,
     },
     29: {
       standardScore: 70.3,
-      percentile: null,
+      percentile: 100.0,
     },
     28: {
       standardScore: 68.3,
@@ -1145,7 +1145,7 @@ export const languageScore = {
     },
     24: {
       standardScore: 60.1,
-      percentile: null,
+      percentile: 95.3,
     },
     23: {
       standardScore: 58.1,
@@ -1189,7 +1189,7 @@ export const languageScore = {
     },
     13: {
       standardScore: 37.7,
-      percentile: null,
+      percentile: 20.8,
     },
     12: {
       standardScore: 35.7,
@@ -1208,11 +1208,11 @@ export const languageScore = {
   "2023": {
     30: {
       standardScore: 72.5,
-      percentile: null,
+      percentile: 100.0,
     },
     29: {
       standardScore: 70.4,
-      percentile: null,
+      percentile: 100.0,
     },
     28: {
       standardScore: 68.3,
@@ -1457,7 +1457,7 @@ export const reasoningScore = {
     averageScore: 20.93,
     35: {
       standardScore: 80.1,
-      percentile: null,
+      percentile: 100.0,
     },
     34: {
       standardScore: 78.0,
@@ -1647,19 +1647,19 @@ export const reasoningScore = {
     averageScore: 19.86,
     35: {
       standardScore: 87.3,
-      percentile: null,
+      percentile: 100.0,
     },
     34: {
       standardScore: 84.8,
-      percentile: null,
+      percentile: 100.0,
     },
     33: {
       standardScore: 82.4,
-      percentile: null,
+      percentile: 100.0,
     },
     32: {
       standardScore: 79.9,
-      percentile: null,
+      percentile: 100.0,
     },
     31: {
       standardScore: 77.5,
@@ -2318,7 +2318,7 @@ export const reasoningScore = {
     },
     39: {
       standardScore: 90.0,
-      percentile: null,
+      percentile: 99.9,
     },
     38: {
       standardScore: 88.0,
@@ -2326,7 +2326,7 @@ export const reasoningScore = {
     },
     37: {
       standardScore: 86.0,
-      percentile: null,
+      percentile: 99.4,
     },
     36: {
       standardScore: 84.0,
@@ -2492,15 +2492,15 @@ export const reasoningScore = {
     },
     39: {
       standardScore: 94.8,
-      percentile: null,
+      percentile: 100.0,
     },
     38: {
       standardScore: 92.6,
-      percentile: null,
+      percentile: 100.0,
     },
     37: {
       standardScore: 90.4,
-      percentile: null,
+      percentile: 99.8,
     },
     36: {
       standardScore: 88.2,
@@ -2568,26 +2568,26 @@ export const reasoningScore = {
     },
     20: {
       standardScore: 54.3,
-      percentile: null,
+      percentile: 31.7,
     },
     averageScore: 22.7,
   },
   "2023": {
     40: {
       standardScore: 94.8,
-      percentile: null,
+      percentile: 100.0,
     },
     39: {
       standardScore: 92.7,
-      percentile: null,
+      percentile: 100.0,
     },
     38: {
       standardScore: 90.7,
-      percentile: null,
+      percentile: 100.0,
     },
     37: {
       standardScore: 88.6,
-      percentile: null,
+      percentile: 99.7,
     },
     36: {
       standardScore: 86.5,

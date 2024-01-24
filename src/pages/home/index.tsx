@@ -106,6 +106,7 @@ export default function Home() {
         }
       >
         일부 점수에 한해 표준점수와 백분위가 N/A로 나타날 수 있습니다.
+        <br /> (24년도의 경우 아직 백분위 점수 집계 중입니다.)
       </Alert>
 
       <AnswerTable
