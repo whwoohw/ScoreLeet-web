@@ -1,20 +1,20 @@
 import * as S from "@/components/header/header.styled";
-import { useAuth } from "@/hooks/contextHooks";
-import { auth } from "@/utils/firebase";
-import { Link, useNavigate } from "react-router-dom";
+// import { useAuth } from "@/hooks/contextHooks";
+// import { auth } from "@/utils/firebase";
+import { Link } from "react-router-dom";
 
 export default function Header() {
-  const { currentUser } = useAuth();
+  // const { currentUser } = useAuth();
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
-  const onLogOut = async () => {
-    const ok = confirm("로그아웃 하시겠습니까?");
-    if (ok) {
-      await auth.signOut();
-      navigate("/");
-    }
-  };
+  // const onLogOut = async () => {
+  //   const ok = confirm("로그아웃 하시겠습니까?");
+  //   if (ok) {
+  //     await auth.signOut();
+  //     navigate("/");
+  //   }
+  // };
 
   return (
     <S.Wrapper>
@@ -22,7 +22,7 @@ export default function Header() {
         <Link to="/">
           <S.Logo>LEET 기출 채점</S.Logo>
         </Link>
-        {currentUser ? (
+        {/* {currentUser ? (
           <S.HeaderLinkList>
             <Link to={`/score-insight}`}>
               <S.HeaderLinkItem>내 성적분석</S.HeaderLinkItem>
@@ -40,7 +40,7 @@ export default function Header() {
               <S.HeaderLinkItem>회원가입</S.HeaderLinkItem>
             </Link>
           </S.HeaderLinkList>
-        )}
+        )} */}
       </S.HeaderTop>
     </S.Wrapper>
   );

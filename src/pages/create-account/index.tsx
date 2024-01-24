@@ -9,6 +9,13 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, InputAdornment, TextField } from "@mui/material";
 import AuthFormItem from "@/components/auth-form-item";
+// import emailjs from "@emailjs/browser";
+
+// const {
+//   VITE_EMAILJS_SERVICE_ID,
+//   VITE_EMAILJS_TEMPLATE_ID,
+//   VITE_EMAILJS_PUBLIC_KEY,
+// } = import.meta.env;
 
 export default function CreateAccount() {
   const navigate = useNavigate();
@@ -65,11 +72,52 @@ export default function CreateAccount() {
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
+
+    // const formData = { email: "hyhan1114@snu.ac.kr", code: "123456" };
+
+    // // Create a form element
+    // const form = document.createElement("form");
+
+    // // Set form attributes if needed
+    // form.method = "post"; // or 'get'
+    // form.action = "/your-submit-endpoint"; // replace with your form submission endpoint
+
+    // // Loop through the object properties and create input elements
+    // for (const key in formData) {
+    //   if (formData.hasOwnProperty(key)) {
+    //     const input = document.createElement("input");
+    //     input.type = "hidden"; // use hidden inputs to store the data
+    //     input.name = key;
+    //     input.value = formData[key];
+
+    //     // Append the input to the form
+    //     form.appendChild(input);
+    //   }
+    // }
+
     if (formValues.email && !errors.email) {
       openSnackbar({
         message: "인증번호가 발송되었습니다",
         type: "success",
       });
+
+      // // 여기서 인증번호 발송하기
+      // emailjs
+      //   .sendForm(
+      //     VITE_EMAILJS_SERVICE_ID,
+      //     VITE_EMAILJS_TEMPLATE_ID,
+      //     form,
+      //     VITE_EMAILJS_PUBLIC_KEY
+      //   )
+      //   .then(
+      //     (result) => {
+      //       console.log(result.text);
+      //     },
+      //     (error) => {
+      //       console.log(error.text);
+      //     }
+      //   );
+
       setVerificationValues({
         ...verificationValues,
         isVerificationCodeSent: true,
