@@ -1,15 +1,15 @@
 import * as S from "@/pages/create-account/create-account.styled";
-import { useSnackbar } from "@/hooks/contextHooks";
 import { auth, db } from "@/utils/firebase";
 import { emailRegex, passwordRegex } from "@/utils/regex";
 import { FirebaseError } from "firebase/app";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc } from "firebase/firestore";
+import { Timestamp, doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, InputAdornment, TextField } from "@mui/material";
 import AuthFormItem from "@/components/auth-form-item";
 // import emailjs from "@emailjs/browser";
+import { createRandomCode } from "@/utils/functions";
 
 // const {
 //   VITE_EMAILJS_SERVICE_ID,
@@ -17,10 +17,10 @@ import AuthFormItem from "@/components/auth-form-item";
 //   VITE_EMAILJS_PUBLIC_KEY,
 // } = import.meta.env;
 
+const verificationCode = createRandomCode();
+
 export default function CreateAccount() {
   const navigate = useNavigate();
-
-  const { openSnackbar } = useSnackbar();
 
   const [isLoading, setLoading] = useState(false);
 
@@ -45,10 +45,14 @@ export default function CreateAccount() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
-    setFormValues({
-      ...formValues,
-      [name]: value,
-    });
+    if (name === "verificationCode") {
+      setVerificationValues({ ...verificationValues, verificationCode: value });
+    } else {
+      setFormValues({
+        ...formValues,
+        [name]: value,
+      });
+    }
 
     if (name === "email") {
       setErrors({
@@ -73,7 +77,7 @@ export default function CreateAccount() {
   ) => {
     e.preventDefault();
 
-    // const formData = { email: "hyhan1114@snu.ac.kr", code: "123456" };
+    // const formData = { email: formValues.email, code: verificationCode };
 
     // // Create a form element
     // const form = document.createElement("form");
@@ -95,50 +99,41 @@ export default function CreateAccount() {
     //   }
     // }
 
-    if (formValues.email && !errors.email) {
-      openSnackbar({
-        message: "인증번호가 발송되었습니다",
-        type: "success",
-      });
+    window.alert("인증번호가 발송되었습니다");
 
-      // // 여기서 인증번호 발송하기
-      // emailjs
-      //   .sendForm(
-      //     VITE_EMAILJS_SERVICE_ID,
-      //     VITE_EMAILJS_TEMPLATE_ID,
-      //     form,
-      //     VITE_EMAILJS_PUBLIC_KEY
-      //   )
-      //   .then(
-      //     (result) => {
-      //       console.log(result.text);
-      //     },
-      //     (error) => {
-      //       console.log(error.text);
-      //     }
-      //   );
+    // // 여기서 인증번호 발송하기
+    // emailjs
+    //   .sendForm(
+    //     VITE_EMAILJS_SERVICE_ID,
+    //     VITE_EMAILJS_TEMPLATE_ID,
+    //     form,
+    //     VITE_EMAILJS_PUBLIC_KEY
+    //   )
+    //   .then(
+    //     (result) => {
+    //       console.log(result.text);
+    //     },
+    //     (error) => {
+    //       console.log(error.text);
+    //     }
+    //   );
 
-      setVerificationValues({
-        ...verificationValues,
-        isVerificationCodeSent: true,
-      });
-    } else {
-      openSnackbar({
-        message: "올바른 이메일 형식이 아닙니다!",
-        type: "error",
-      });
-    }
+    setVerificationValues({
+      ...verificationValues,
+      isVerificationCodeSent: true,
+    });
   };
 
   const handleSubmitverificationCode = (
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
-    openSnackbar({
-      message: "인증이 완료되었습니다.",
-      type: "success",
-    });
-    setVerificationValues({ ...verificationValues, isVerified: true });
+    if (verificationCode === verificationValues.verificationCode) {
+      window.alert("인증이 완료되었습니다.");
+      setVerificationValues({ ...verificationValues, isVerified: true });
+    } else {
+      window.alert("잘못된 인증번호입니다.");
+    }
   };
 
   const handleSubmitCreateAccountForm = async (
@@ -156,24 +151,25 @@ export default function CreateAccount() {
 
       await setDoc(doc(db, "users", credentials.user.uid), {
         uid: credentials.user.uid,
-        type: "tutor",
         email: credentials.user.email,
+        createdAt: Timestamp.now(),
       });
 
-      await setDoc(doc(db, "userChats", credentials.user.uid), {});
+      await setDoc(doc(db, "userInfos", credentials.user.uid), {});
 
-      navigate("/profile/tutor/edit");
+      window.alert("회원가입이 완료되었습니다.");
+
+      navigate("/");
     } catch (e) {
       if (e instanceof FirebaseError) {
-        openSnackbar({
-          message: e.message,
-          type: "error",
-        });
+        window.alert(`${e.message}`);
       }
     } finally {
       setLoading(false);
     }
   };
+
+  console.log(verificationCode);
 
   return (
     <S.Wrapper onSubmit={handleSubmitCreateAccountForm}>
@@ -199,12 +195,17 @@ export default function CreateAccount() {
             endAdornment: (
               <InputAdornment position="end">
                 <Button
+                  disabled={
+                    formValues.email &&
+                    !errors.email &&
+                    !verificationValues.isVerificationCodeSent
+                      ? false
+                      : true
+                  }
                   variant={"contained"}
                   onClick={handleSubmitEmailAuthentication}
                 >
-                  {verificationValues.isVerificationCodeSent
-                    ? "재전송"
-                    : "보내기"}
+                  보내기
                 </Button>
               </InputAdornment>
             ),
@@ -278,7 +279,8 @@ export default function CreateAccount() {
           formValues.confirmPassword &&
           !errors.email &&
           !errors.password &&
-          !errors.confirmPassword
+          !errors.confirmPassword &&
+          verificationValues.isVerified
             ? false
             : true
         }

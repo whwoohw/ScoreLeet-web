@@ -1,10 +1,10 @@
 import styled from "styled-components";
 
 export const Wrapper = styled.form`
-  width: 100%;
+  margin-top: 30px;
+  width: 500px;
+  min-width: 350px;
   display: flex;
   flex-direction: column;
-  gap: 20px;
   align-items: center;
-  padding: 50px 0;
 `;

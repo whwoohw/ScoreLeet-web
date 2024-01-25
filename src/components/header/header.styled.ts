@@ -40,7 +40,10 @@ export const HeaderLinkList = styled.div`
 export const HeaderLinkItem = styled.p`
   font-size: 14px;
   line-height: 20px;
-  color: #bdbdbd;
+  color: black;
+  &:hover {
+    color: #577dd0;
+  }
 `;
 
 export const Separator = styled.p`

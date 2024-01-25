@@ -1,6 +1,6 @@
 import * as S from "@/pages/home/home.styled";
 
-import AnswerTable from "@/components/table/table";
+import AnswerTable from "@/components/answer-table/answer-table";
 import { LeetTypes, LeetYears } from "@/types/leetAnswers";
 import {
   Alert,
@@ -20,26 +20,7 @@ import { language, reasoning } from "@/data/leetAnswers";
 import { languageScore, reasoningScore } from "@/data/leetScores";
 import { logEvent } from "firebase/analytics";
 import { analytics } from "@/utils/firebase";
-
-const leetYears = [
-  "2024",
-  "2023",
-  "2022",
-  "2021",
-  "2020",
-  "2019",
-  "2018",
-  "2017",
-  "2016",
-  "2015",
-  "2014",
-  "2013",
-  "2012",
-  "2011",
-  "2010",
-  "2009",
-  // "2009pre",
-];
+import { leetYearsData } from "@/data/leetAnswers";
 
 export default function Home() {
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -68,7 +49,7 @@ export default function Home() {
             label="시험년도"
             onChange={handleChangeYear}
           >
-            {leetYears.map((leetYear) => (
+            {leetYearsData.map((leetYear) => (
               <MenuItem value={leetYear} key={leetYear}>
                 {leetYear + "년"}
               </MenuItem>

@@ -1,4 +1,4 @@
-import * as S from "@/components/table/table.styles";
+import * as S from "@/components/answer-table/answer-table.styles";
 import { Button, useMediaQuery } from "@mui/material";
 
 import { useEffect, useRef, useState } from "react";
@@ -9,6 +9,7 @@ import { Timestamp, addDoc, collection } from "firebase/firestore";
 import { analytics, db } from "@/utils/firebase";
 import { LeetTypes, LeetYears } from "@/types/leetAnswers";
 import { logEvent } from "firebase/analytics";
+import { countMatchingElements } from "@/utils/functions";
 
 interface TableProps {
   title: string;
@@ -17,21 +18,6 @@ interface TableProps {
   leetYear: LeetYears;
   leetType: LeetTypes;
 }
-
-const countMatchingElements = (
-  answerInputs: (number | undefined)[],
-  answers: number[]
-) => {
-  let count = 0;
-
-  answerInputs.forEach((element, index) => {
-    if (element === answers[index]) {
-      count++;
-    }
-  });
-
-  return count;
-};
 
 export default function AnswerTable({
   title,
@@ -135,154 +121,6 @@ export default function AnswerTable({
       setAnswerInputs([]);
     }
   };
-
-  // const handleSubmit = async () => {
-  //   logEvent(analytics, `scoring_button_${title}`);
-  //   if (!isSubmit) {
-  //     const indexOfUndefined = answerInputs.indexOf(undefined);
-  //     if (indexOfUndefined !== -1) {
-  //       const updatedAnswerInputs = answerInputs.map((item) =>
-  //         item === undefined ? null : item
-  //       );
-  //       if (updatedAnswerInputs.length !== answers.length) {
-  //         const updatedArray = Array.from(
-  //           { length: answers.length },
-  //           (_, index) => updatedAnswerInputs[index] || null
-  //         );
-
-  //         if (
-  //           window.confirm(
-  //             `입력되지 않은 답안이 있습니다. 그래도 채점하시겠습니까?`
-  //           )
-  //         ) {
-  //           if (countMatchingElements(answerInputs, answers) > 5) {
-  //             try {
-  //               await addDoc(
-  //                 collection(
-  //                   db,
-  //                   "answers",
-  //                   leetYear + "(" + leetType + ")",
-  //                   title
-  //                 ),
-  //                 {
-  //                   score: countMatchingElements(answerInputs, answers),
-  //                   answers: updatedArray,
-  //                   createdAt: Timestamp.now(),
-  //                 }
-  //               );
-  //             } catch (e) {
-  //               console.log(e);
-  //             } finally {
-  //               setSubmit(true);
-  //               setScore(countMatchingElements(answerInputs, answers));
-  //             }
-  //           } else {
-  //             setSubmit(true);
-  //             setScore(countMatchingElements(answerInputs, answers));
-  //           }
-  //         }
-  //       } else {
-  //         if (
-  //           window.confirm(
-  //             `입력되지 않은 답안이 있습니다. 그래도 채점하시겠습니까?`
-  //           )
-  //         ) {
-  //           if (countMatchingElements(answerInputs, answers) > 5) {
-  //             try {
-  //               await addDoc(
-  //                 collection(
-  //                   db,
-  //                   "answers",
-  //                   leetYear + "(" + leetType + ")",
-  //                   title
-  //                 ),
-  //                 {
-  //                   score: countMatchingElements(answerInputs, answers),
-  //                   answers: updatedAnswerInputs,
-  //                   createdAt: Timestamp.now(),
-  //                 }
-  //               );
-  //             } catch (e) {
-  //               console.log(e);
-  //             } finally {
-  //               setSubmit(true);
-  //               setScore(countMatchingElements(answerInputs, answers));
-  //             }
-  //           } else {
-  //             setSubmit(true);
-  //             setScore(countMatchingElements(answerInputs, answers));
-  //           }
-  //         }
-  //       }
-  //     } else if (answerInputs.length !== answers.length) {
-  //       const updatedArray = Array.from(
-  //         { length: answers.length },
-  //         (_, index) => answerInputs[index] || null
-  //       );
-
-  //       if (
-  //         window.confirm(
-  //           `입력되지 않은 답안이 있습니다. 그래도 채점하시겠습니까?`
-  //         )
-  //       ) {
-  //         if (countMatchingElements(answerInputs, answers) > 5) {
-  //           try {
-  //             await addDoc(
-  //               collection(
-  //                 db,
-  //                 "answers",
-  //                 leetYear + "(" + leetType + ")",
-  //                 title
-  //               ),
-  //               {
-  //                 score: countMatchingElements(answerInputs, answers),
-  //                 answers: updatedArray,
-  //                 createdAt: Timestamp.now(),
-  //               }
-  //             );
-  //           } catch (e) {
-  //             console.log(e);
-  //           } finally {
-  //             setSubmit(true);
-  //             setScore(countMatchingElements(answerInputs, answers));
-  //           }
-  //         } else {
-  //           setSubmit(true);
-  //           setScore(countMatchingElements(answerInputs, answers));
-  //         }
-  //       }
-  //     } else {
-  //       if (countMatchingElements(answerInputs, answers) > 5) {
-  //         try {
-  //           await addDoc(
-  //             collection(db, "answers", leetYear + "(" + leetType + ")", title),
-  //             {
-  //               score: countMatchingElements(answerInputs, answers),
-  //               answers: answerInputs,
-  //               createdAt: Timestamp.now(),
-  //             }
-  //           );
-  //         } catch (e) {
-  //           console.log(e);
-  //         } finally {
-  //           setSubmit(true);
-  //           setScore(countMatchingElements(answerInputs, answers));
-
-  //           window.alert("채점이 완료되었습니다.");
-  //         }
-  //       } else {
-  //         setSubmit(true);
-  //         setScore(countMatchingElements(answerInputs, answers));
-
-  //         window.alert("채점이 완료되었습니다.");
-  //       }
-  //     }
-  //   } else {
-  //     setSubmit(false);
-  //     setAnswerShowed(false);
-  //     setAnswerInputs([]);
-  //   }
-  // };
 
   useEffect(() => {
     setAnswerShowed(false);
