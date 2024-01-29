@@ -4,29 +4,42 @@ import { Button, useMediaQuery } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
-import { LeetScores } from "@/types/leetScores";
-import { Timestamp, addDoc, collection } from "firebase/firestore";
-import { analytics, db } from "@/utils/firebase";
+import { analytics } from "@/utils/firebase";
 import { LeetTypes, LeetYears } from "@/types/leetAnswers";
 import { logEvent } from "firebase/analytics";
-import { countMatchingElements } from "@/utils/functions";
+import { language, reasoning } from "@/data/leetAnswers";
+import {
+  handleAnswerSubmission,
+  handleUserAnswerSubmission,
+} from "@/api/answer-table";
+import { languageScore, reasoningScore } from "@/data/leetScores";
+
+import { useAuth } from "@/hooks/contextHooks";
+import {
+  countMatchingElements,
+  getScoreAdditionalInfos,
+} from "@/utils/answerTable";
 
 interface TableProps {
-  title: string;
-  answers: number[];
-  scores: LeetScores;
+  title: "언어이해" | "추리논증";
   leetYear: LeetYears;
   leetType: LeetTypes;
 }
 
-export default function AnswerTable({
-  title,
-  answers,
-  scores,
-  leetYear,
-  leetType,
-}: TableProps) {
+export default function AnswerTable({ title, leetYear, leetType }: TableProps) {
+  const { currentUser } = useAuth();
   const isMobile = useMediaQuery("(max-width: 600px)");
+
+  const { answers, scores } =
+    title === "언어이해"
+      ? {
+          answers: language[leetYear][leetType],
+          scores: languageScore[leetYear],
+        }
+      : {
+          answers: reasoning[leetYear][leetType],
+          scores: reasoningScore[leetYear],
+        };
 
   const inputRefs = useRef(new Array(answers.length));
 
@@ -60,39 +73,12 @@ export default function AnswerTable({
     }
   };
 
-  const handleSubmit = async () => {
-    const handleSubmission = async (
-      updatedAnswers: (number | null | undefined)[]
-    ) => {
-      if (countMatchingElements(answerInputs, answers) > 5) {
-        try {
-          await addDoc(
-            collection(db, "answers", `${leetYear}(${leetType})`, title),
-            {
-              score: countMatchingElements(answerInputs, answers),
-              answers: updatedAnswers,
-              createdAt: Timestamp.now(),
-            }
-          );
-        } catch (e) {
-          console.log(e);
-        } finally {
-          setSubmit(true);
-          setScore(countMatchingElements(answerInputs, answers));
-          window.alert("채점이 완료되었습니다.");
-        }
-      } else {
-        setSubmit(true);
-        setScore(countMatchingElements(answerInputs, answers));
-        window.alert("채점이 완료되었습니다.");
-      }
-    };
-
+  const handleSubmit = () => {
     logEvent(analytics, `scoring_button_${title}`);
 
     if (!isSubmit) {
       const hasUndefined = answerInputs.includes(undefined);
-      const updatedAnswerInputs = answerInputs.map((item) =>
+      const answerInputsWithoutUndefined = answerInputs.map((item) =>
         item === undefined ? null : item
       );
 
@@ -102,18 +88,92 @@ export default function AnswerTable({
             `입력되지 않은 답안이 있습니다. 그래도 채점하시겠습니까?`
           )
         ) {
-          const updatedArray = Array.from(
+          const updatedAnswerInputs = Array.from(
             { length: answers.length },
             (_, index) =>
               hasUndefined
-                ? updatedAnswerInputs[index] || null
+                ? answerInputsWithoutUndefined[index] || null
                 : answerInputs[index] || null
           );
 
-          await handleSubmission(updatedArray);
+          const score = countMatchingElements(updatedAnswerInputs, answers);
+
+          if (currentUser) {
+            const standardScore = getScoreAdditionalInfos(
+              scores,
+              score,
+              "standardScore"
+            );
+
+            const percentile = getScoreAdditionalInfos(
+              scores,
+              score,
+              "percentile"
+            );
+
+            handleUserAnswerSubmission({
+              currentUser,
+              answerInputs: updatedAnswerInputs,
+              score,
+              standardScore,
+              percentile,
+              leetYear,
+              leetType,
+              title,
+              setSubmit,
+              setScore,
+            });
+          } else {
+            handleAnswerSubmission({
+              answerInputs: updatedAnswerInputs,
+              score,
+              leetYear,
+              leetType,
+              title,
+              setSubmit,
+              setScore,
+            });
+          }
         }
       } else {
-        await handleSubmission(answerInputs);
+        const score = countMatchingElements(answerInputs, answers);
+
+        if (currentUser) {
+          const standardScore = getScoreAdditionalInfos(
+            scores,
+            score,
+            "standardScore"
+          );
+
+          const percentile = getScoreAdditionalInfos(
+            scores,
+            score,
+            "percentile"
+          );
+
+          handleUserAnswerSubmission({
+            currentUser,
+            answerInputs,
+            score,
+            standardScore,
+            percentile,
+            leetYear,
+            leetType,
+            title,
+            setSubmit,
+            setScore,
+          });
+        } else {
+          handleAnswerSubmission({
+            answerInputs,
+            score,
+            leetYear,
+            leetType,
+            title,
+            setSubmit,
+            setScore,
+          });
+        }
       }
     } else {
       setSubmit(false);

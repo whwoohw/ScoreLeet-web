@@ -1,4 +1,11 @@
-export const leetYearsData = [
+import {
+  LeetAnswersData,
+  LeetTypes,
+  LeetYears,
+  QuestionTypes,
+} from "@/types/leetAnswers";
+
+export const leetYearsData: LeetYears[] = [
   "2024",
   "2023",
   "2022",
@@ -17,11 +24,11 @@ export const leetYearsData = [
   "2009",
 ];
 
-export const leetTypesData = ["odd", "even"];
+export const leetTypesData: LeetTypes[] = ["odd", "even"];
 
-export const QuestionTypesData = ["language", "reasoning"];
+export const QuestionTypesData: QuestionTypes[] = ["language", "reasoning"];
 
-export const reasoning = {
+export const reasoning: LeetAnswersData = {
   // "2009pre": {
   //   odd: [
   //     2, 2, 3, 5, 1, 3, 4, 2, 3, 3, 3, 1, 2, 5, 4, 2, 3, 5, 4, 5, 5, 4, 5, 1, 1,
@@ -194,7 +201,7 @@ export const reasoning = {
   },
 };
 
-export const language = {
+export const language: LeetAnswersData = {
   // "2009pre": {
   //   odd: [
   //     2, 5, 4, 3, 2, 2, 1, 1, 3, 5, 4, 3, 5, 5, 1, 4, 5, 4, 2, 1, 2, 1, 2, 3, 3,

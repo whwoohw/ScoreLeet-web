@@ -20,3 +20,5 @@ export type LeetYears =
 export type LeetTypes = "odd" | "even";
 
 export type QuestionTypes = "reasoning" | "language";
+
+export type LeetAnswersData = Record<LeetYears, Record<LeetTypes, number[]>>;

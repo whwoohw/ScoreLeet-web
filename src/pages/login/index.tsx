@@ -1,8 +1,8 @@
 import AuthFormItem from "@/components/auth-form-item";
 
 import * as S from "@/pages/login/login.styled";
-import { auth } from "@/utils/firebase";
-import { firebaseAuthError } from "@/utils/functions";
+import { auth, getFirebaseAuthError } from "@/utils/firebase";
+
 import { Button, TextField } from "@mui/material";
 import { FirebaseError } from "firebase/app";
 import { signInWithEmailAndPassword } from "firebase/auth";
@@ -39,7 +39,7 @@ export default function Login() {
     } catch (e) {
       if (e instanceof FirebaseError) {
         console.log(e.code);
-        window.alert(firebaseAuthError(e.code));
+        window.alert(getFirebaseAuthError(e.code));
       }
     } finally {
       setLoading(false);

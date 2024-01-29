@@ -5,22 +5,18 @@ import { LeetTypes, LeetYears } from "@/types/leetAnswers";
 import {
   Alert,
   FormControl,
-  FormControlLabel,
-  FormLabel,
   InputLabel,
   MenuItem,
-  Radio,
-  RadioGroup,
   Select,
   SelectChangeEvent,
   useMediaQuery,
 } from "@mui/material";
 import { useState } from "react";
-import { language, reasoning } from "@/data/leetAnswers";
-import { languageScore, reasoningScore } from "@/data/leetScores";
+
 import { logEvent } from "firebase/analytics";
 import { analytics } from "@/utils/firebase";
 import { leetYearsData } from "@/data/leetAnswers";
+import CustomRadioGroup from "@/components/radio-group";
 
 export default function Home() {
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -56,18 +52,17 @@ export default function Home() {
             ))}
           </Select>
         </FormControl>
-        <FormControl>
-          <FormLabel id="radio-label">시험 유형</FormLabel>
-          <RadioGroup
-            row
-            aria-labelledby="radio-label"
-            value={leetType}
-            onChange={handleChangeType}
-          >
-            <FormControlLabel value="odd" control={<Radio />} label="홀수형" />
-            <FormControlLabel value="even" control={<Radio />} label="짝수형" />
-          </RadioGroup>
-        </FormControl>
+
+        <CustomRadioGroup
+          title="시험 유형"
+          isRow
+          radioValue={leetType}
+          changeRadio={handleChangeType}
+          radioItems={[
+            { value: "odd", label: "홀수형" },
+            { value: "even", label: "짝수형" },
+          ]}
+        />
       </S.SelectGroupContainer>
 
       <Alert
@@ -90,21 +85,9 @@ export default function Home() {
         <br /> (24년도의 경우 아직 백분위 점수 집계 중입니다.)
       </Alert>
 
-      <AnswerTable
-        title={"언어이해"}
-        answers={language[leetYear][leetType]}
-        scores={languageScore[leetYear]}
-        leetYear={leetYear}
-        leetType={leetType}
-      />
+      <AnswerTable title={"언어이해"} leetYear={leetYear} leetType={leetType} />
 
-      <AnswerTable
-        title={"추리논증"}
-        answers={reasoning[leetYear][leetType]}
-        scores={reasoningScore[leetYear]}
-        leetYear={leetYear}
-        leetType={leetType}
-      />
+      <AnswerTable title={"추리논증"} leetYear={leetYear} leetType={leetType} />
 
       <Alert
         severity="warning"

@@ -8,8 +8,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button, InputAdornment, TextField } from "@mui/material";
 import AuthFormItem from "@/components/auth-form-item";
+import { createRandomCode } from "@/utils/auth";
 // import emailjs from "@emailjs/browser";
-import { createRandomCode } from "@/utils/functions";
 
 // const {
 //   VITE_EMAILJS_SERVICE_ID,
@@ -155,7 +155,7 @@ export default function CreateAccount() {
         createdAt: Timestamp.now(),
       });
 
-      await setDoc(doc(db, "userInfos", credentials.user.uid), {});
+      await setDoc(doc(db, "scoreInsights", credentials.user.uid), {});
 
       window.alert("회원가입이 완료되었습니다.");
 

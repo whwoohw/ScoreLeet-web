@@ -1,13 +1,7 @@
 import * as S from "@/pages/admin/admin.styled";
-import {
-  QuestionTypesData,
-  leetTypesData,
-  leetYearsData,
-} from "@/data/leetAnswers";
+
 import { useAuth } from "@/hooks/contextHooks";
 import { LeetTypes, LeetYears, QuestionTypes } from "@/types/leetAnswers";
-import { db } from "@/utils/firebase";
-import { Timestamp, collection, getDocs, query } from "firebase/firestore";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Navigate } from "react-router-dom";
 import {
@@ -29,25 +23,15 @@ import {
   GridRowId,
   GridValueGetterParams,
 } from "@mui/x-data-grid";
-import { getQuestionTypeLabel } from "@/utils/functions";
-
-interface AnswersData {
-  [leetyear: string]: {
-    [leetType: string]: {
-      [questionType: string]: {
-        id: string;
-        score: number;
-        answers: number[];
-        createdAt: Timestamp;
-      }[];
-    };
-  };
-}
+import { leetYearsData } from "@/data/leetAnswers";
+import { getQuestionTypeLabel } from "@/utils/answerTable";
+import { AnswersData } from "@/types/admin";
+import { getAdminAnswers } from "@/api/admin";
 
 export default function AdminPage() {
   const { currentUser } = useAuth();
 
-  const [answersData, setAnswersData] = useState<AnswersData>();
+  const [answersData, setAnswersData] = useState<AnswersData[]>();
 
   const [leetYear, setLeetYear] = useState<LeetYears>("2024");
   const [leetType, setLeetType] = useState<LeetTypes>("odd");
@@ -68,24 +52,9 @@ export default function AdminPage() {
 
   const handleDeleteClick = useCallback(
     (id: GridRowId) => () => {
-      setAnswersData((prevData) => {
-        return {
-          ...prevData,
-          [leetYear]: {
-            ...prevData?.[leetYear],
-            [leetType]: {
-              ...prevData?.[leetYear]?.[leetType],
-
-              [getQuestionTypeLabel(questionType)]:
-                prevData?.[leetYear]?.[leetType]?.[
-                  getQuestionTypeLabel(questionType)
-                ]?.filter((row) => row.id !== id) || [],
-            },
-          },
-        };
-      });
+      setAnswersData((prevData) => prevData?.filter((row) => row.id !== id));
     },
-    [leetYear, leetType, questionType]
+    []
   );
 
   const columns = useMemo<GridColDef[]>(
@@ -124,52 +93,18 @@ export default function AdminPage() {
   );
 
   useEffect(() => {
-    const getAnswersData = async (
-      leetYear: string,
-      leetType: string,
-      questionType: string
-    ) => {
-      const answersQuery = query(
-        collection(db, "answers", leetYear + "(" + leetType + ")", questionType)
-      );
+    getAdminAnswers(
+      leetYear,
+      leetType,
+      getQuestionTypeLabel(questionType),
+      setAnswersData
+    );
+  }, [leetYear, leetType, questionType]);
+  if (!currentUser) {
+    return <Navigate to="/login" />;
+  }
 
-      const querySnapshot = await getDocs(answersQuery);
-
-      const data = querySnapshot.docs.map((doc) => ({
-        id: doc.id,
-        score: doc.data().score,
-        answers: doc.data().answers,
-        createdAt: doc.data().createdAt as Timestamp,
-      }));
-
-      setAnswersData((prevData) => {
-        return {
-          ...prevData,
-          [leetYear]: {
-            ...prevData?.[leetYear],
-            [leetType]: {
-              ...prevData?.[leetYear]?.[leetType],
-              [questionType]: data,
-            },
-          },
-        };
-      });
-    };
-
-    leetYearsData.map((leetYear) => {
-      leetTypesData.map((leetType) =>
-        QuestionTypesData.map((questionType) => {
-          getAnswersData(
-            leetYear,
-            leetType,
-            getQuestionTypeLabel(questionType)
-          );
-        })
-      );
-    });
-  }, []);
-
-  if (!currentUser || currentUser.email !== "scoreleet@gmail.com") {
+  if (currentUser.email !== "scoreleet@gmail.com") {
     return <Navigate to="/" />;
   }
 
@@ -229,11 +164,7 @@ export default function AdminPage() {
       <S.TableWrapper>
         {answersData && (
           <DataGrid
-            rows={
-              answersData[leetYear][leetType][
-                getQuestionTypeLabel(questionType)
-              ]
-            }
+            rows={answersData}
             columns={columns}
             initialState={{
               pagination: {

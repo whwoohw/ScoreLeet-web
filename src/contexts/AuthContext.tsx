@@ -1,3 +1,4 @@
+// import { ScoreInsights } from "@/types/scoreInsights";
 import { auth } from "@/utils/firebase";
 import { User, onAuthStateChanged } from "firebase/auth";
 import { ReactNode, createContext, useEffect, useState } from "react";

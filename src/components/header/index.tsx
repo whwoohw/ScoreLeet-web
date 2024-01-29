@@ -24,7 +24,7 @@ export default function Header() {
         </Link>
         {currentUser ? (
           <S.HeaderLinkList>
-            <Link to={`/score-insight}`}>
+            <Link to="/score-insight">
               <S.HeaderLinkItem>내 성적분석</S.HeaderLinkItem>
             </Link>
             <S.Separator> | </S.Separator>

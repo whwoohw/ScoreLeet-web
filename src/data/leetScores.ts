@@ -1,4 +1,6 @@
-export const languageScore = {
+import { LeetScoresData } from "@/types/leetScores";
+
+export const languageScore: LeetScoresData = {
   "2009": {
     averageScore: 28.52,
     40: {
@@ -1345,7 +1347,7 @@ export const languageScore = {
   },
 };
 
-export const reasoningScore = {
+export const reasoningScore: LeetScoresData = {
   "2009": {
     averageScore: 22.63,
     40: {
