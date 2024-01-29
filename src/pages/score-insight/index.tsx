@@ -1,8 +1,8 @@
 import { getScoreInsights } from "@/api/score-insight";
 import CustomRadioGroup from "@/components/radio-group";
 import { CustomTooltip } from "@/components/score-insights-chart";
-import CloseIcon from "@mui/icons-material/Close";
-import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
+// import CloseIcon from "@mui/icons-material/Close";
+// import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
 
 import ScoreInsightsItem from "@/components/score-insights-item";
 import ScoreInsightsTable from "@/components/score-insights-table";
@@ -82,6 +82,15 @@ export default function ScoreInsight() {
     }
   };
 
+  const handleChangeAnswerReport = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    if (event.target.name === "questionType") {
+      setAnswerReportsQuestionType(event.target.value as QuestionTypes);
+    } else {
+      setAnswerReportsNumber(Number(event.target.value));
+    }
+  };
   const handleDeleteClick = useCallback(
     (id: GridRowId) => () => {
       setAnswerReportsData((prevData) =>
@@ -387,13 +396,10 @@ export default function ScoreInsight() {
               <div style={{ display: "flex", flexDirection: "column" }}>
                 <CustomRadioGroup
                   title="시험 유형"
+                  name="questionType"
                   isRow
                   radioValue={answerReportsQuestionType}
-                  changeRadio={(event) =>
-                    setAnswerReportsQuestionType(
-                      event.target.value as QuestionTypes
-                    )
-                  }
+                  changeRadio={handleChangeAnswerReport}
                   radioItems={[
                     { value: "language", label: "언어이해" },
                     { value: "reasoning", label: "추리논증" },
@@ -402,11 +408,10 @@ export default function ScoreInsight() {
 
                 <CustomRadioGroup
                   title="시험 유형"
+                  name="numberType"
                   isRow
                   radioValue={answerReportsNumber}
-                  changeRadio={(event) =>
-                    setAnswerReportsNumber(event.target.value)
-                  }
+                  changeRadio={handleChangeAnswerReport}
                   radioItems={[
                     { value: 1, label: "1회차" },
                     { value: 2, label: "2회차" },

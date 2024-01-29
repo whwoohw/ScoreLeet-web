@@ -6,8 +6,6 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Home from "./pages/home";
 import Layout from "./components/layout";
 import { GlobalStyles } from "./styles/globalstyles";
-import Login from "./pages/login";
-import CreateAccount from "./pages/create-account";
 import ScoreInsight from "./pages/score-insight";
 import AdminPage from "./pages/admin";
 
@@ -19,14 +17,6 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Home />,
-      },
-      {
-        path: "login",
-        element: <Login />,
-      },
-      {
-        path: "create-account",
-        element: <CreateAccount />,
       },
       {
         path: "score-insight",

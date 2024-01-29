@@ -101,7 +101,7 @@ export default function AdminPage() {
     );
   }, [leetYear, leetType, questionType]);
   if (!currentUser) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
 
   if (currentUser.email !== "scoreleet@gmail.com") {
