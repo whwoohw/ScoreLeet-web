@@ -2,13 +2,28 @@ import * as S from "@/components/header/header.styled";
 import { useAuth } from "@/hooks/contextHooks";
 import { auth } from "@/utils/firebase";
 import { Link, useNavigate } from "react-router-dom";
+import GoogleLoginImage from "@/assets/svg/web_light_sq_na.svg?react";
+import { Button } from "@mui/material";
+
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 export default function Header() {
   const { currentUser } = useAuth();
 
   const navigate = useNavigate();
 
-  const onLogOut = async () => {
+  const handleGoogleLogin = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
+  const handleLogOut = async () => {
     const ok = confirm("로그아웃 하시겠습니까?");
     if (ok) {
       await auth.signOut();
@@ -28,17 +43,17 @@ export default function Header() {
               <S.HeaderLinkItem>내 성적분석</S.HeaderLinkItem>
             </Link>
             <S.Separator> | </S.Separator>
-            <S.HeaderLinkItem onClick={onLogOut}>로그아웃</S.HeaderLinkItem>
+            <S.HeaderLinkItem onClick={handleLogOut}>로그아웃</S.HeaderLinkItem>
           </S.HeaderLinkList>
         ) : (
           <S.HeaderLinkList>
-            <Link to="/login">
-              <S.HeaderLinkItem>로그인</S.HeaderLinkItem>
-            </Link>
-            <S.Separator> | </S.Separator>
-            <Link to="/create-account">
-              <S.HeaderLinkItem>회원가입</S.HeaderLinkItem>
-            </Link>
+            <Button
+              onClick={handleGoogleLogin}
+              variant="contained"
+              startIcon={<GoogleLoginImage />}
+            >
+              구글 로그인
+            </Button>
           </S.HeaderLinkList>
         )}
       </S.HeaderTop>
