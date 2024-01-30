@@ -1,8 +1,11 @@
 import { getScoreInsights } from "@/api/score-insight";
 import CustomRadioGroup from "@/components/radio-group";
 import { CustomTooltip } from "@/components/score-insights-chart";
-// import CloseIcon from "@mui/icons-material/Close";
-// import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
+import CloseIcon from "@mui/icons-material/Close";
+import CircleOutlinedIcon from "@mui/icons-material/CircleOutlined";
+import ExpandLessIcon from "@mui/icons-material/ExpandLess";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import SortIcon from "@mui/icons-material/Sort";
 
 import ScoreInsightsItem from "@/components/score-insights-item";
 import ScoreInsightsTable from "@/components/score-insights-table";
@@ -34,7 +37,7 @@ import {
   GridRowId,
   koKR,
 } from "@mui/x-data-grid";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -91,24 +94,34 @@ export default function ScoreInsight() {
       setAnswerReportsNumber(Number(event.target.value));
     }
   };
-  const handleDeleteClick = useCallback(
-    (id: GridRowId) => () => {
-      setAnswerReportsData((prevData) =>
-        prevData?.filter((row) => row.id !== id)
-      );
-    },
-    []
-  );
+
+  const handleDeleteClick = (id: GridRowId) => () => {
+    setAnswerReportsData((prevData) =>
+      prevData?.filter((row) => row.id !== id)
+    );
+  };
 
   const columns = useMemo<GridColDef[]>(
     () => [
-      { field: "questionNumber", headerName: "문항", width: 100 },
+      {
+        field: "questionNumber",
+        headerName: "문항",
+        width: 100,
+        headerAlign: "center",
+        align: "center",
+        headerClassName: "answer-reports-table-header",
+
+        valueFormatter: ({ value }) => `${value}번`,
+      },
       {
         field: "answerInput",
         headerName: "내 답안",
         type: "number",
         width: 100,
         sortable: false,
+        headerAlign: "center",
+        align: "center",
+        headerClassName: "answer-reports-table-header",
       },
       {
         field: "answer",
@@ -116,31 +129,53 @@ export default function ScoreInsight() {
         type: "number",
         width: 100,
         sortable: false,
+        headerAlign: "center",
+        align: "center",
+        headerClassName: "answer-reports-table-header",
       },
       {
         field: "isAnswer",
         type: "boolean",
         headerName: "정오",
         width: 100,
-        sortable: false,
+        renderCell: ({ value }) =>
+          value === true ? (
+            <CircleOutlinedIcon
+              sx={{ width: "18px", height: "18px", color: "#1f6cd9" }}
+            />
+          ) : (
+            <CloseIcon
+              sx={{ width: "18px", height: "18px", color: "#ff5b5b" }}
+            />
+          ),
+
+        headerAlign: "center",
+        align: "center",
+        headerClassName: "answer-reports-table-header",
       },
 
       {
         field: "area",
         headerName: "영역",
         type: "string",
-        width: 150,
+        width: 100,
+        headerAlign: "center",
+        align: "center",
+        headerClassName: "answer-reports-table-header",
       },
       {
         field: "difficulty",
         headerName: "난이도",
         type: "string",
         width: 100,
+        headerAlign: "center",
+        align: "center",
+        headerClassName: "answer-reports-table-header",
       },
       {
         field: "actions",
         type: "actions",
-        width: 30,
+        width: 20,
         getActions: (params) => [
           <GridActionsCellItem
             icon={<GridDeleteIcon />}
@@ -150,7 +185,7 @@ export default function ScoreInsight() {
         ],
       },
     ],
-    [handleDeleteClick]
+    []
   );
 
   useEffect(() => {
@@ -166,19 +201,20 @@ export default function ScoreInsight() {
           id: index,
           questionNumber: index + 1,
           answerInput:
-            scoreInsights.language[answerReportsNumber - 1].answers?.[index] ??
-            null,
+            scoreInsights.language?.[answerReportsNumber - 1]?.answers?.[
+              index
+            ] ?? "-",
           answer,
           isAnswer:
             answer ===
-            scoreInsights.language[answerReportsNumber - 1].answers?.[index],
+            scoreInsights.language?.[answerReportsNumber - 1]?.answers?.[index],
           area:
             leetYear === "2009" || leetYear === "2010" || leetYear === "2011"
-              ? null
+              ? "-"
               : (languageExamReports[leetYear].odd.area[index] as QuestionArea),
           difficulty:
             leetYear === "2009" || leetYear === "2010" || leetYear === "2011"
-              ? null
+              ? "-"
               : (languageExamReports[leetYear].odd.difficulty[
                   index
                 ] as QuestionDifficulty),
@@ -189,21 +225,24 @@ export default function ScoreInsight() {
           id: index,
           questionNumber: index + 1,
           answerInput:
-            scoreInsights.reasoning[answerReportsNumber - 1].answers?.[index] ??
-            null,
+            scoreInsights.reasoning?.[answerReportsNumber - 1]?.answers?.[
+              index
+            ] ?? "-",
           answer,
           isAnswer:
             answer ===
-            scoreInsights.reasoning[answerReportsNumber - 1].answers?.[index],
+            scoreInsights.reasoning?.[answerReportsNumber - 1]?.answers?.[
+              index
+            ],
           area:
             leetYear === "2009" || leetYear === "2010" || leetYear === "2011"
-              ? null
+              ? "-"
               : (reasoningExamReports[leetYear].odd.area[
                   index
                 ] as QuestionArea),
           difficulty:
             leetYear === "2009" || leetYear === "2010" || leetYear === "2011"
-              ? null
+              ? "-"
               : (reasoningExamReports[leetYear].odd.difficulty[
                   index
                 ] as QuestionDifficulty),
@@ -212,14 +251,6 @@ export default function ScoreInsight() {
       }
     }
   }, [scoreInsights, answerReportsNumber, answerReportsQuestionType, leetYear]);
-
-  console.log(
-    scoreInsights,
-    answerReportsData,
-    answerReportsNumber,
-    answerReportsQuestionType,
-    leetYear
-  );
 
   return (
     <S.Wrapper>
@@ -393,43 +424,80 @@ export default function ScoreInsight() {
             </ScoreInsightsItem>
 
             <ScoreInsightsItem title={"3. 문항별 오답 분석"}>
-              <div style={{ display: "flex", flexDirection: "column" }}>
-                <CustomRadioGroup
-                  title="시험 유형"
-                  name="questionType"
-                  isRow
-                  radioValue={answerReportsQuestionType}
-                  changeRadio={handleChangeAnswerReport}
-                  radioItems={[
-                    { value: "language", label: "언어이해" },
-                    { value: "reasoning", label: "추리논증" },
-                  ]}
-                />
-
-                <CustomRadioGroup
-                  title="시험 유형"
-                  name="numberType"
-                  isRow
-                  radioValue={answerReportsNumber}
-                  changeRadio={handleChangeAnswerReport}
-                  radioItems={[
-                    { value: 1, label: "1회차" },
-                    { value: 2, label: "2회차" },
-                    { value: 3, label: "3회차" },
-                  ]}
-                />
-
-                {answerReportsData && (
-                  <DataGrid
-                    rows={answerReportsData}
-                    columns={columns}
-                    showCellVerticalBorder={true}
-                    showColumnVerticalBorder={true}
-                    localeText={
-                      koKR.components.MuiDataGrid.defaultProps.localeText
-                    }
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "50px",
+                  }}
+                >
+                  <CustomRadioGroup
+                    title="시험 유형"
+                    name="questionType"
+                    radioValue={answerReportsQuestionType}
+                    changeRadio={handleChangeAnswerReport}
+                    radioItems={[
+                      { value: "language", label: "언어이해" },
+                      { value: "reasoning", label: "추리논증" },
+                    ]}
                   />
-                )}
+
+                  <CustomRadioGroup
+                    title="시험 회차"
+                    isRow
+                    name="numberType"
+                    radioValue={answerReportsNumber}
+                    changeRadio={handleChangeAnswerReport}
+                    radioItems={[
+                      { value: 1, label: "1회차" },
+                      { value: 2, label: "2회차" },
+                      { value: 3, label: "3회차" },
+                    ]}
+                  />
+                </div>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    marginTop: "20px",
+                  }}
+                >
+                  {answerReportsData && (
+                    <DataGrid
+                      rows={answerReportsData}
+                      columns={columns}
+                      showCellVerticalBorder={true}
+                      showColumnVerticalBorder={true}
+                      localeText={
+                        koKR.components.MuiDataGrid.defaultProps.localeText
+                      }
+                      hideFooter
+                      slots={{
+                        columnSortedDescendingIcon: ExpandLessIcon,
+                        columnSortedAscendingIcon: ExpandMoreIcon,
+                        columnUnsortedIcon: SortIcon,
+                      }}
+                      disableColumnMenu
+                      disableColumnFilter
+                      sx={{
+                        boxShadow: 2,
+                        "& .MuiDataGrid-cell:hover": {
+                          color: "primary.main",
+                        },
+                        "& .answer-reports-table-header": {
+                          backgroundColor: "#eeeeee",
+                          fontSize: "16px",
+                        },
+                      }}
+                    />
+                  )}
+                </div>
               </div>
             </ScoreInsightsItem>
           </>

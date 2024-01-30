@@ -77,7 +77,7 @@ export default function ScoreInsightsTable({
         reasoning == undefined ||
         reasoning?.score === 0
           ? "-"
-          : language.score + reasoning.score + "점"}
+          : (language.score + reasoning.score).toFixed(1) + "점"}
       </S.ScoreTableItemBody>
       <S.ScoreTableItemBody>
         {language == undefined ||
@@ -85,7 +85,8 @@ export default function ScoreInsightsTable({
         reasoning == undefined ||
         reasoning?.standardScore === 0
           ? "-"
-          : language.standardScore + reasoning.standardScore + "점"}
+          : (language.standardScore + reasoning.standardScore).toFixed(1) +
+            "점"}
       </S.ScoreTableItemBody>
       <S.ScoreTableItemBody>
         {language == undefined ||
@@ -93,12 +94,12 @@ export default function ScoreInsightsTable({
         reasoning == undefined ||
         reasoning?.percentile === 0
           ? "-"
-          : language.percentile + reasoning.percentile + "점"}
+          : (language.percentile + reasoning.percentile).toFixed(1) + "점"}
       </S.ScoreTableItemBody>
       <S.ScoreTableItemBody
         style={{ backgroundColor: "#eeeeee", fontStyle: "italic" }}
       >
-        {languageAverage + reasoningAverage}점
+        {(languageAverage + reasoningAverage).toFixed(2)}점
       </S.ScoreTableItemBody>
     </S.Wrapper>
   );

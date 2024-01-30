@@ -2,26 +2,26 @@ import * as S from "@/components/header/header.styled";
 import { useAuth } from "@/hooks/contextHooks";
 import { auth } from "@/utils/firebase";
 import { Link, useNavigate } from "react-router-dom";
-// import GoogleLoginImage from "@/assets/svg/web_light_sq_na.svg?react";
-// import { Button } from "@mui/material";
+import GoogleLoginImage from "@/assets/svg/web_light_sq_na.svg?react";
+import { Button } from "@mui/material";
 
-// import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 
 export default function Header() {
   const { currentUser } = useAuth();
 
   const navigate = useNavigate();
 
-  // const handleGoogleLogin = () => {
-  //   const provider = new GoogleAuthProvider();
-  //   signInWithPopup(auth, provider)
-  //     .then((data) => {
-  //       console.log(data);
-  //     })
-  //     .catch((err) => {
-  //       console.log(err);
-  //     });
-  // };
+  const handleGoogleLogin = () => {
+    const provider = new GoogleAuthProvider();
+    signInWithPopup(auth, provider)
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
 
   const handleLogOut = async () => {
     const ok = confirm("로그아웃 하시겠습니까?");
@@ -47,7 +47,7 @@ export default function Header() {
           </S.HeaderLinkList>
         ) : (
           <S.HeaderLinkList>
-            {/* <Button
+            <Button
               onClick={handleGoogleLogin}
               variant="contained"
               sx={{
@@ -58,7 +58,7 @@ export default function Header() {
               startIcon={<GoogleLoginImage />}
             >
               구글 계정으로 로그인
-            </Button> */}
+            </Button>
           </S.HeaderLinkList>
         )}
       </S.HeaderTop>

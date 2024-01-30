@@ -42,9 +42,9 @@ export type ExamReportsData = Record<
 export interface AnswerReports {
   id: number;
   questionNumber: number;
-  answerInput: number | null;
+  answerInput: number | string;
   answer: number;
   isAnswer: boolean;
-  area: QuestionArea | null;
-  difficulty: QuestionDifficulty | null;
+  area: QuestionArea | string;
+  difficulty: QuestionDifficulty | string;
 }
