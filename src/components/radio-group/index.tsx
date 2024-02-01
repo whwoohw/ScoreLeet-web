@@ -8,6 +8,7 @@ import {
 
 interface CustomRadioGroup {
   title: string;
+  disabled?: boolean;
   name?: string;
   isRow?: boolean;
   radioValue: string | number;
@@ -20,6 +21,7 @@ interface CustomRadioGroup {
 
 export default function CustomRadioGroup({
   title,
+  disabled,
   name,
   isRow,
   radioValue,
@@ -28,7 +30,16 @@ export default function CustomRadioGroup({
 }: CustomRadioGroup) {
   return (
     <FormControl>
-      <FormLabel id="radio-label">{title}</FormLabel>
+      <FormLabel
+        sx={
+          !disabled
+            ? { fontSize: "18px", fontWeight: "bold", color: "black" }
+            : null
+        }
+        id="radio-label"
+      >
+        {title}
+      </FormLabel>
       <RadioGroup
         name={name}
         row={isRow}
@@ -39,6 +50,7 @@ export default function CustomRadioGroup({
         {radioItems.map((item, i) => (
           <FormControlLabel
             key={i}
+            disabled={disabled}
             value={item.value}
             control={<Radio />}
             label={item.label}

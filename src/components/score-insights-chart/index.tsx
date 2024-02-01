@@ -1,17 +1,14 @@
-// import {
-//   Bar,
-//   BarChart,
-//   CartesianGrid,
-//   Legend,
-//   ResponsiveContainer,
-//   Tooltip,
-//   XAxis,
-//   YAxis,
-// } from "recharts";
-
 import * as S from "@/components/score-insights-chart/score-insights-chart.styled";
 import { getChartToolTipLabel } from "@/utils/scoreInsights";
-import { TooltipProps } from "recharts";
+import {
+  PolarAngleAxis,
+  PolarGrid,
+  PolarRadiusAxis,
+  Radar,
+  RadarChart,
+  ResponsiveContainer,
+  TooltipProps,
+} from "recharts";
 import {
   NameType,
   ValueType,
@@ -90,4 +87,23 @@ export const CustomTooltip = ({
   }
 
   return null;
+};
+
+export const CustomRadarChart = ({ data }: { data: any[] }) => {
+  return (
+    <ResponsiveContainer width="100%" height="100%">
+      <RadarChart cx="50%" cy="50%" outerRadius="65%" data={data}>
+        <PolarGrid />
+        <PolarAngleAxis dataKey="name" />
+        <PolarRadiusAxis domain={[0, 100]} />
+        <Radar
+          name="radar"
+          dataKey="value"
+          stroke="#42a5f5"
+          fill="#42a5f5"
+          fillOpacity={0.8}
+        />
+      </RadarChart>
+    </ResponsiveContainer>
+  );
 };

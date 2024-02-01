@@ -12,7 +12,17 @@ export interface ScoreInsights {
   createdAt: Timestamp;
 }
 
+export type ScoreType = "score" | "standardScore" | "percentile";
+
 export type ScoreInsightsData = Record<QuestionTypes, ScoreInsights[]>;
+
+export type ScoreInsightsAreaData = Record<
+  QuestionArea,
+  {
+    score: number;
+    total: number;
+  }
+>;
 
 export type QuestionDifficulty = "상" | "중" | "하";
 
@@ -34,10 +44,7 @@ export interface ExamReports {
   correctRate?: number[];
 }
 
-export type ExamReportsData = Record<
-  Exclude<LeetYears, "2009" | "2010" | "2011">,
-  Record<LeetTypes, ExamReports>
->;
+export type ExamReportsData = Record<LeetYears, Record<LeetTypes, ExamReports>>;
 
 export interface AnswerReports {
   id: number;
@@ -47,4 +54,19 @@ export interface AnswerReports {
   isAnswer: boolean;
   area: QuestionArea | string;
   difficulty: QuestionDifficulty | string;
+}
+
+export interface UserAnswersData {
+  id: string;
+  year: LeetYears;
+  index: number;
+  language: Omit<
+    ScoreInsights,
+    "id" | "createdAt" | "questionType" | "leetType"
+  >;
+  reasoning: Omit<
+    ScoreInsights,
+    "id" | "createdAt" | "questionType" | "leetType"
+  >;
+  createdAt: Timestamp;
 }

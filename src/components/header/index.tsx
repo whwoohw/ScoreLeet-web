@@ -6,6 +6,7 @@ import GoogleLoginImage from "@/assets/svg/web_light_sq_na.svg?react";
 import { Button } from "@mui/material";
 
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { registerUser } from "@/api/auth";
 
 export default function Header() {
   const { currentUser } = useAuth();
@@ -15,8 +16,8 @@ export default function Header() {
   const handleGoogleLogin = () => {
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
-      .then((data) => {
-        console.log(data);
+      .then(async (data) => {
+        await registerUser(data);
       })
       .catch((err) => {
         console.log(err);

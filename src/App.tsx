@@ -6,8 +6,11 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Home from "./pages/home";
 import Layout from "./components/layout";
 import { GlobalStyles } from "./styles/globalstyles";
-import ScoreInsight from "./pages/score-insight";
+
 import AdminPage from "./pages/admin";
+import ScoreInsightsDetail from "./pages/score-insights/detail";
+import ScoreInsights from "./pages/score-insights";
+import Test from "./pages/test";
 
 const router = createBrowserRouter([
   {
@@ -19,8 +22,21 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "score-insight",
-        element: <ScoreInsight />,
+        path: "score-insights",
+        children: [
+          {
+            path: "",
+            element: <ScoreInsights />,
+          },
+          {
+            path: "detail",
+            element: <ScoreInsightsDetail />,
+          },
+        ],
+      },
+      {
+        path: "test",
+        element: <Test />,
       },
       {
         path: "admin",
