@@ -65,6 +65,8 @@ export default function ScoreInsightsExample() {
   };
 
   const handleGoogleLogin = () => {
+    logEvent(analytics, "example_google_login");
+
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
       .then(async (data) => {

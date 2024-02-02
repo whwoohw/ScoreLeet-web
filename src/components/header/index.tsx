@@ -1,12 +1,13 @@
 import * as S from "@/components/header/header.styled";
 import { useAuth } from "@/hooks/contextHooks";
-import { auth } from "@/utils/firebase";
+import { analytics, auth } from "@/utils/firebase";
 import { Link, useNavigate } from "react-router-dom";
 import GoogleLoginImage from "@/assets/svg/google_logo.svg?react";
 import { Button, useMediaQuery } from "@mui/material";
 
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { registerUser } from "@/api/auth";
+import { logEvent } from "firebase/analytics";
 
 export default function Header() {
   const { currentUser } = useAuth();
@@ -16,6 +17,7 @@ export default function Header() {
   const navigate = useNavigate();
 
   const handleGoogleLogin = () => {
+    logEvent(analytics, "header_google_login");
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
       .then(async (data) => {
