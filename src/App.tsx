@@ -11,8 +11,9 @@ import AdminPage from "./pages/admin";
 import ScoreInsightsDetail from "./pages/score-insights/detail";
 import ScoreInsights from "./pages/score-insights";
 import UserTest from "./pages/user-test";
-import Scoring from "./pages/scoring";
+
 import ProtectedRoute from "./components/protected-route";
+import ScoreInsightsExample from "./pages/example";
 
 const router = createBrowserRouter([
   {
@@ -22,10 +23,6 @@ const router = createBrowserRouter([
       {
         path: "",
         element: <Home />,
-      },
-      {
-        path: "scoring",
-        element: <Scoring />,
       },
       {
         path: "score-insights",
@@ -46,6 +43,10 @@ const router = createBrowserRouter([
                 <ScoreInsightsDetail />
               </ProtectedRoute>
             ),
+          },
+          {
+            path: "example",
+            element: <ScoreInsightsExample />,
           },
         ],
       },

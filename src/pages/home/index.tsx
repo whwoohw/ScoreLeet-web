@@ -2,8 +2,11 @@ import * as S from "@/pages/home/home.styled";
 
 import AnswerTable from "@/components/answer-table/answer-table";
 import { LeetTypes, LeetYears } from "@/types/leetAnswers";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+
 import {
   Alert,
+  Fab,
   FormControl,
   InputLabel,
   MenuItem,
@@ -18,7 +21,7 @@ import { analytics } from "@/utils/firebase";
 import { leetYearsData } from "@/data/leetAnswers";
 import CustomRadioGroup from "@/components/radio-group";
 import { useAuth } from "@/hooks/contextHooks";
-import { Navigate } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 
 export default function Home() {
   const isMobile = useMediaQuery("(max-width: 600px)");
@@ -44,6 +47,47 @@ export default function Home() {
 
   return (
     <S.Wrapper>
+      <S.AlertWrapper>
+        <Alert
+          severity="info"
+          sx={
+            isMobile
+              ? {
+                  display: "flex",
+                  width: "100%",
+                  height: "40px",
+                  fontSize: "12px",
+                  fontWeight: "bold",
+                  lineHeight: "18px",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }
+              : {
+                  display: "flex",
+                  width: "300px",
+                  height: "60px",
+                  fontSize: "16px",
+                  fontWeight: "bold",
+                  lineHeight: "24px",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }
+          }
+        >
+          성적분석 업데이트 했습니다
+        </Alert>
+        <Link to={"/score-insights/example"}>
+          <Fab
+            sx={{ zIndex: 1, width: "140px" }}
+            variant="extended"
+            size="medium"
+            color="primary"
+          >
+            <ArrowBackIcon sx={{ mr: 1 }} />
+            확인하러가기
+          </Fab>
+        </Link>
+      </S.AlertWrapper>
       <S.SelectGroupContainer>
         <FormControl sx={{ m: 1, width: 120 }}>
           <InputLabel id="select-label">시험년도</InputLabel>

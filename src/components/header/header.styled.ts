@@ -34,7 +34,7 @@ export const Logo = styled.h3`
   font-size: 35px;
 
   ${media.mobile(`
-    font-size: 20px;
+    font-size: 24px;
   `)}
 `;
 

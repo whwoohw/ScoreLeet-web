@@ -8,6 +8,13 @@ export const Wrapper = styled.div`
   gap: 40px;
 `;
 
+export const AlertWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: center;
+`;
+
 export const SelectGroupContainer = styled.div`
   display: flex;
   flex-direction: row;
