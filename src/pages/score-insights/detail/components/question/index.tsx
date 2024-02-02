@@ -18,6 +18,8 @@ import {
   reasoningExamReports,
 } from "@/data/scoreInsights";
 import { CustomDataGridToolBar } from "@/components/score-insights-table";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "@/utils/firebase";
 
 const columns: GridColDef[] = [
   {
@@ -161,7 +163,10 @@ export default function ScoreInsightsQuestionInsights({
         isRow
         name="questionType"
         radioValue={questionType}
-        changeRadio={(e) => setQuestionType(e.target.value as QuestionTypes)}
+        changeRadio={(e) => {
+          logEvent(analytics, `score_insights_question_change_button`);
+          setQuestionType(e.target.value as QuestionTypes);
+        }}
         radioItems={[
           { value: "language", label: "언어이해" },
           { value: "reasoning", label: "추리논증" },

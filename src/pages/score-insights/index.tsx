@@ -27,6 +27,8 @@ import {
   CustomDataGridToolBar,
   CustomNoRowsOverlay,
 } from "@/components/score-insights-table";
+import { logEvent } from "firebase/analytics";
+import { analytics } from "@/utils/firebase";
 
 const columnGroupingModel: GridColumnGroupingModel = [
   {
@@ -61,6 +63,7 @@ export default function ScoreInsights() {
 
   const handleCellIconClick = useCallback(
     (id: GridRowId) => () => {
+      logEvent(analytics, `score_insights_detail_button`);
       navigate(`detail?id=${id}`);
     },
     [navigate]

@@ -8,6 +8,7 @@ import {
   countMatchingElements,
   getScoreAdditionalInfos,
 } from "@/utils/answerTable";
+import { analytics } from "@/utils/firebase";
 import {
   Alert,
   AlertTitle,
@@ -19,6 +20,7 @@ import {
   SelectChangeEvent,
   useMediaQuery,
 } from "@mui/material";
+import { logEvent } from "firebase/analytics";
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -96,6 +98,7 @@ export default function UserTest() {
   };
 
   const handleSubmit = () => {
+    logEvent(analytics, `user_tests_submit_button`);
     if (!currentUser) {
       return;
     }

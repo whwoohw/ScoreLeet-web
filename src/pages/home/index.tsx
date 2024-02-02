@@ -21,10 +21,12 @@ import { analytics } from "@/utils/firebase";
 import { leetYearsData } from "@/data/leetAnswers";
 import CustomRadioGroup from "@/components/radio-group";
 import { useAuth } from "@/hooks/contextHooks";
-import { Link, Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function Home() {
   const isMobile = useMediaQuery("(max-width: 600px)");
+
+  const navigate = useNavigate();
 
   const { currentUser } = useAuth();
 
@@ -39,6 +41,11 @@ export default function Home() {
   const handleChangeType = (event: React.ChangeEvent<HTMLInputElement>) => {
     logEvent(analytics, `change_type`);
     setLeetType(event.target.value as LeetTypes);
+  };
+
+  const handleClickFab = () => {
+    logEvent(analytics, `check_example_button`);
+    navigate("/score-insights/example");
   };
 
   if (currentUser) {
@@ -76,17 +83,17 @@ export default function Home() {
         >
           성적분석 업데이트 했습니다
         </Alert>
-        <Link to={"/score-insights/example"}>
-          <Fab
-            sx={{ zIndex: 1, width: "140px" }}
-            variant="extended"
-            size="medium"
-            color="primary"
-          >
-            <ArrowBackIcon sx={{ mr: 1 }} />
-            확인하러가기
-          </Fab>
-        </Link>
+
+        <Fab
+          sx={{ zIndex: 1, width: "140px" }}
+          variant="extended"
+          size="medium"
+          color="primary"
+          onClick={handleClickFab}
+        >
+          <ArrowBackIcon sx={{ mr: 1 }} />
+          확인하러가기
+        </Fab>
       </S.AlertWrapper>
       <S.SelectGroupContainer>
         <FormControl sx={{ m: 1, width: 120 }}>

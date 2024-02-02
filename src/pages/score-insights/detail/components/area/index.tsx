@@ -9,10 +9,12 @@ import {
 import * as S from "@/pages/score-insights/detail/components/area/area.styled";
 import { QuestionTypes } from "@/types/leetAnswers";
 import { ScoreInsightsData } from "@/types/scoreInsights";
+import { analytics } from "@/utils/firebase";
 import {
   calculateAreaScores,
   convertToRadarChartData,
 } from "@/utils/scoreInsights";
+import { logEvent } from "firebase/analytics";
 import { useState } from "react";
 
 interface ScoreInsightsAreaInsightsProps {
@@ -63,7 +65,10 @@ export default function ScoreInsightsAreaInsights({
           isRow
           name="questionType"
           radioValue={questionType}
-          changeRadio={(e) => setQuestionType(e.target.value as QuestionTypes)}
+          changeRadio={(e) => {
+            logEvent(analytics, `score_insights_area_change_button`);
+            setQuestionType(e.target.value as QuestionTypes);
+          }}
           radioItems={[
             { value: "language", label: "언어이해" },
             { value: "reasoning", label: "추리논증" },

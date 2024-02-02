@@ -18,9 +18,10 @@ import AreaInsight from "@/assets/img/area-insight.png";
 import QuestionInsight from "@/assets/img/question-insight.png";
 import { KeyboardArrowLeft, KeyboardArrowRight } from "@mui/icons-material";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "@/utils/firebase";
+import { analytics, auth } from "@/utils/firebase";
 import { registerUser } from "@/api/auth";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { logEvent } from "firebase/analytics";
 
 const steps = [
   {
@@ -54,10 +55,12 @@ export default function ScoreInsightsExample() {
   const maxSteps = steps.length;
 
   const handleNext = () => {
+    logEvent(analytics, `example_next_button`);
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
   const handleBack = () => {
+    logEvent(analytics, `example_back_button`);
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
