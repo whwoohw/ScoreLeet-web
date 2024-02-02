@@ -32,6 +32,10 @@ export const Logo = styled.h3`
   font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
   font-style: oblique;
   font-size: 35px;
+
+  ${media.mobile(`
+    font-size: 20px;
+  `)}
 `;
 
 export const HeaderLinkList = styled.div`
@@ -39,6 +43,10 @@ export const HeaderLinkList = styled.div`
   flex-direction: row;
   gap: 20px;
   align-items: center;
+
+  ${media.mobile(`
+    gap: 8px;
+  `)}
 `;
 
 export const HeaderLinkItem = styled.p`
@@ -48,9 +56,18 @@ export const HeaderLinkItem = styled.p`
   &:hover {
     color: #577dd0;
   }
+
+  ${media.mobile(`
+    font-size: 10px;
+    line-height: 16px;
+  `)}
 `;
 
 export const Separator = styled.p`
   font-size: 12px;
   color: #bdbdbd;
+
+  ${media.mobile(`
+    font-size: 8px;
+  `)}
 `;

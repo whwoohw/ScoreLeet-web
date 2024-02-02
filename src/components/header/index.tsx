@@ -2,14 +2,16 @@ import * as S from "@/components/header/header.styled";
 import { useAuth } from "@/hooks/contextHooks";
 import { auth } from "@/utils/firebase";
 import { Link, useNavigate } from "react-router-dom";
-import GoogleLoginImage from "@/assets/svg/web_light_sq_na.svg?react";
-import { Button } from "@mui/material";
+import GoogleLoginImage from "@/assets/svg/google_logo.svg?react";
+import { Button, useMediaQuery } from "@mui/material";
 
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { registerUser } from "@/api/auth";
 
 export default function Header() {
   const { currentUser } = useAuth();
+
+  const isMobile = useMediaQuery("(max-width: 600px)");
 
   const navigate = useNavigate();
 
@@ -55,12 +57,26 @@ export default function Header() {
             <Button
               onClick={handleGoogleLogin}
               variant="contained"
-              sx={{
-                backgroundColor: "#4285f4",
-                height: "45px",
-                padding: "10px 7px",
-              }}
-              startIcon={<GoogleLoginImage />}
+              sx={
+                isMobile
+                  ? {
+                      backgroundColor: "#4285f4",
+                      height: "30px",
+                      padding: "10px 7px",
+                    }
+                  : {
+                      backgroundColor: "#4285f4",
+                      height: "45px",
+                      padding: "10px 7px",
+                    }
+              }
+              startIcon={
+                isMobile ? (
+                  <GoogleLoginImage style={{ width: 20, height: 20 }} />
+                ) : (
+                  <GoogleLoginImage style={{ width: 40, height: 40 }} />
+                )
+              }
             >
               구글 계정으로 로그인
             </Button>

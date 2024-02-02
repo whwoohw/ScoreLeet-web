@@ -173,7 +173,7 @@ export default function UserTest() {
                 marginTop: "10px",
                 width: "100%",
                 height: "max-content",
-                fontSize: "10.5px",
+                fontSize: "10px",
                 lineHeight: "16px",
               }
             : {
@@ -186,25 +186,48 @@ export default function UserTest() {
         }
       >
         <AlertTitle>정보</AlertTitle>
-        이 페이지에서 제출하는 채점 정보는 '내 성적분석'에서 확인할 수 있습니다.
+        현재 페이지에서 제출하는 채점 정보는 '내 성적분석'에서 확인할 수
+        있습니다.
         <br />
-        성적분석을 원하시지 않는다면, 로그아웃 후 기존 페이지를 사용해주세요!
+        단순 채점만 원하시는 경우, 로그아웃 후 이용 가능합니다.
       </Alert>
-      <FormControl sx={{ m: 1, width: 150 }}>
-        <InputLabel id="select-label">시험년도</InputLabel>
-        <Select
-          labelId="select-label"
-          value={leetYear}
-          label="시험년도"
-          onChange={handleChangeYear}
+      <S.SelectContainer>
+        <FormControl sx={{ m: 1, width: "150px" }}>
+          <InputLabel id="select-label">시험년도</InputLabel>
+          <Select
+            labelId="select-label"
+            value={leetYear}
+            label="시험년도"
+            onChange={handleChangeYear}
+          >
+            {leetYearsData.map((leetYear) => (
+              <MenuItem value={leetYear} key={leetYear}>
+                {leetYear + "년"}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <Alert
+          severity="warning"
+          sx={
+            isMobile
+              ? {
+                  height: "max-content",
+                  fontSize: "10.5px",
+                  lineHeight: "16px",
+                }
+              : {
+                  display: "flex",
+                  height: "max-content",
+                  width: "max-content",
+                  fontSize: "14px",
+                  lineHeight: "26px",
+                }
+          }
         >
-          {leetYearsData.map((leetYear) => (
-            <MenuItem value={leetYear} key={leetYear}>
-              {leetYear + "년"}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+          성적분석은 홀수형 문제만 채점이 가능합니다!
+        </Alert>
+      </S.SelectContainer>
 
       <S.TableWrapper>
         <S.TableTitleContainer>

@@ -1281,67 +1281,67 @@ export const languageScore: LeetScoresData = {
   "2024": {
     30: {
       standardScore: 80.9,
-      percentile: null,
+      percentile: 100.0,
     },
     29: {
       standardScore: 78.4,
-      percentile: null,
+      percentile: 100.0,
     },
     28: {
       standardScore: 76.0,
-      percentile: null,
+      percentile: 100.0,
     },
     27: {
       standardScore: 73.6,
-      percentile: null,
+      percentile: 100.0,
     },
     26: {
       standardScore: 71.1,
-      percentile: null,
+      percentile: 99.9,
     },
     25: {
       standardScore: 68.7,
-      percentile: null,
+      percentile: 99.8,
     },
     24: {
       standardScore: 66.3,
-      percentile: null,
+      percentile: 99.4,
     },
     23: {
       standardScore: 63.9,
-      percentile: null,
+      percentile: 98.6,
     },
     22: {
       standardScore: 61.4,
-      percentile: null,
+      percentile: 97.1,
     },
     21: {
       standardScore: 59.0,
-      percentile: null,
+      percentile: 94.5,
     },
     20: {
       standardScore: 56.6,
-      percentile: null,
+      percentile: 90.3,
     },
     19: {
       standardScore: 54.1,
-      percentile: null,
+      percentile: 84.3,
     },
     18: {
       standardScore: 51.7,
-      percentile: null,
+      percentile: 76.4,
     },
     17: {
       standardScore: 49.3,
-      percentile: null,
+      percentile: 67.0,
     },
     16: {
       standardScore: 46.8,
-      percentile: null,
+      percentile: 56.7,
     },
     15: {
       standardScore: 44.4,
-      percentile: null,
+      percentile: 46.0,
     },
     averageScore: 15.25,
   },
@@ -2664,67 +2664,67 @@ export const reasoningScore: LeetScoresData = {
   "2024": {
     40: {
       standardScore: 97.5,
-      percentile: null,
+      percentile: 100.0,
     },
     39: {
       standardScore: 95.4,
-      percentile: null,
+      percentile: 100.0,
     },
     38: {
       standardScore: 93.3,
-      percentile: null,
+      percentile: 100.0,
     },
     37: {
       standardScore: 91.2,
-      percentile: null,
+      percentile: 99.9,
     },
     36: {
       standardScore: 89.1,
-      percentile: null,
+      percentile: 99.8,
     },
     35: {
       standardScore: 86.9,
-      percentile: null,
+      percentile: 99.5,
     },
     34: {
       standardScore: 84.8,
-      percentile: null,
+      percentile: 99.1,
     },
     33: {
       standardScore: 82.7,
-      percentile: null,
+      percentile: 98.3,
     },
     32: {
       standardScore: 80.6,
-      percentile: null,
+      percentile: 96.9,
     },
     31: {
       standardScore: 78.5,
-      percentile: null,
+      percentile: 95.0,
     },
     30: {
       standardScore: 76.4,
-      percentile: null,
+      percentile: 92.3,
     },
     29: {
       standardScore: 74.3,
-      percentile: null,
+      percentile: 88.7,
     },
     28: {
       standardScore: 72.2,
-      percentile: null,
+      percentile: 84.3,
     },
     27: {
       standardScore: 70.1,
-      percentile: null,
+      percentile: 79.3,
     },
     26: {
       standardScore: 68.0,
-      percentile: null,
+      percentile: 73.3,
     },
     25: {
       standardScore: 65.9,
-      percentile: null,
+      percentile: 66.6,
     },
     averageScore: 22.2,
   },
