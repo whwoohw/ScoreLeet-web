@@ -1,15 +1,13 @@
-import * as S from "@/pages/score-insights/score-insight.styled";
+import * as S from "@/pages/score-insights/score-insights.styled";
 
 import { useAuth } from "@/hooks/contextHooks";
-import { LeetYears } from "@/types/leetAnswers";
+
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
+  Alert,
+  AlertTitle,
   CircularProgress,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
+  useMediaQuery,
 } from "@mui/material";
 import {
   DataGrid,
@@ -22,11 +20,13 @@ import {
   GridValueGetterParams,
   koKR,
 } from "@mui/x-data-grid";
-import { leetYearsData } from "@/data/leetAnswers";
 import { UserAnswersData } from "@/types/scoreInsights";
 import { getUserAnswers } from "@/api/score-insight";
 import { useNavigate } from "react-router-dom";
-import { CustomDataGridToolBar } from "@/components/score-insights-table";
+import {
+  CustomDataGridToolBar,
+  CustomNoRowsOverlay,
+} from "@/components/score-insights-table";
 
 const columnGroupingModel: GridColumnGroupingModel = [
   {
@@ -52,19 +52,16 @@ const columnGroupingModel: GridColumnGroupingModel = [
 
 export default function ScoreInsights() {
   const { currentUser } = useAuth();
+  const isMobile = useMediaQuery("(max-width: 600px)");
+
   const navigate = useNavigate();
   const [isLoading, setLoading] = useState(true);
 
   const [answersData, setAnswersData] = useState<UserAnswersData[]>();
-  const [leetYear, setLeetYear] = useState<LeetYears>("2024");
-
-  const handleChangeYear = (event: SelectChangeEvent) => {
-    setLeetYear(event.target.value as LeetYears);
-  };
 
   const handleCellIconClick = useCallback(
-    (id: GridRowId, year: LeetYears) => () => {
-      navigate(`detail?id=${id}&year=${year}`);
+    (id: GridRowId) => () => {
+      navigate(`detail?id=${id}`);
     },
     [navigate]
   );
@@ -72,41 +69,60 @@ export default function ScoreInsights() {
   const columns = useMemo<GridColDef[]>(
     () => [
       {
+        headerName: "상세",
+        headerClassName: "table-header-info",
+        field: "actions",
+        type: "actions",
+        width: 50,
+        getActions: (params) => [
+          <GridActionsCellItem
+            icon={<GridSearchIcon />}
+            label="이동하기"
+            onClick={handleCellIconClick(params.id)}
+          />,
+        ],
+      },
+      {
         field: "index",
         headerName: "번호",
         type: "number",
-        width: 100,
+        width: isMobile ? 50 : 100,
         headerClassName: "table-header",
         headerAlign: "center",
         align: "center",
+        filterable: false,
+        sortable: isMobile ? false : true,
       },
       {
         field: "year",
-        headerName: "시험년도",
-        width: 100,
+        headerName: isMobile ? "년도" : "시험년도",
+        width: isMobile ? 50 : 100,
         valueFormatter: (params: GridValueFormatterParams<string>) => {
           return `${params.value}년`;
         },
         headerClassName: "table-header",
         headerAlign: "center",
         align: "center",
+        sortable: isMobile ? false : true,
       },
       {
         field: "languageScore",
-        headerName: "원점수",
+        headerName: isMobile ? "점수" : "원점수",
         type: "number",
-        width: 100,
+        width: isMobile ? 50 : 100,
         valueGetter: (params: GridValueGetterParams) =>
           params.row.language.score,
         headerClassName: "table-header",
         headerAlign: "center",
         align: "center",
+        filterable: false,
+        sortable: isMobile ? false : true,
       },
       {
         field: "languageStandardScore",
-        headerName: "표준점수",
+        headerName: isMobile ? "표점" : "표준점수",
         type: "number",
-        width: 100,
+        width: isMobile ? 50 : 100,
         valueGetter: (params: GridValueGetterParams) =>
           params.row.language.standardScore,
         valueFormatter: (params: GridValueFormatterParams<number>) => {
@@ -118,23 +134,27 @@ export default function ScoreInsights() {
         headerClassName: "table-header",
         headerAlign: "center",
         align: "center",
+        filterable: false,
+        sortable: isMobile ? false : true,
       },
       {
         field: "reasoningScore",
-        headerName: "원점수",
+        headerName: isMobile ? "점수" : "원점수",
         type: "number",
-        width: 100,
+        width: isMobile ? 50 : 100,
         valueGetter: (params: GridValueGetterParams) =>
           params.row.reasoning.score,
         headerClassName: "table-header",
         headerAlign: "center",
         align: "center",
+        filterable: false,
+        sortable: isMobile ? false : true,
       },
       {
         field: "reasoningStandardScore",
-        headerName: "표준점수",
+        headerName: isMobile ? "표점" : "표준점수",
         type: "number",
-        width: 100,
+        width: isMobile ? 50 : 100,
         valueGetter: (params: GridValueGetterParams) =>
           params.row.reasoning.standardScore,
         valueFormatter: (params: GridValueFormatterParams<number>) => {
@@ -146,59 +166,60 @@ export default function ScoreInsights() {
         headerClassName: "table-header",
         headerAlign: "center",
         align: "center",
+        filterable: false,
+        sortable: isMobile ? false : true,
       },
       {
         field: "createdAt",
         headerName: "제출 시간",
         type: "dateTime",
-        width: 200,
+        width: isMobile ? 150 : 200,
         valueGetter: (params: GridValueGetterParams) =>
           params.row.createdAt.toDate(),
         headerClassName: "table-header",
         headerAlign: "center",
         align: "center",
-      },
-      {
-        field: "actions",
-        type: "actions",
-        width: 30,
-        getActions: (params) => [
-          <GridActionsCellItem
-            icon={<GridSearchIcon />}
-            label="이동하기"
-            onClick={handleCellIconClick(params.id, params.row.year)}
-          />,
-        ],
+        sortable: isMobile ? false : true,
       },
     ],
-    [handleCellIconClick]
+    [handleCellIconClick, isMobile]
   );
 
   useEffect(() => {
     if (currentUser) {
-      getUserAnswers(currentUser, leetYear, setLoading, setAnswersData);
+      getUserAnswers(currentUser, setLoading, setAnswersData);
     }
-  }, [leetYear, currentUser]);
+  }, [currentUser]);
 
   return (
     <S.Wrapper>
-      <S.SelectGroupContainer>
-        <FormControl sx={{ m: 1, width: 120 }}>
-          <InputLabel id="select-label">시험년도</InputLabel>
-          <Select
-            labelId="select-label"
-            value={leetYear}
-            label="시험년도"
-            onChange={handleChangeYear}
-          >
-            {leetYearsData.map((leetYear) => (
-              <MenuItem value={leetYear} key={leetYear}>
-                {leetYear + "년"}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </S.SelectGroupContainer>
+      <Alert
+        severity="info"
+        sx={
+          isMobile
+            ? {
+                marginTop: "10px",
+                width: "100%",
+                height: "max-content",
+                fontSize: "12px",
+                lineHeight: "16px",
+              }
+            : {
+                marginTop: "30px",
+                display: "flex",
+                width: "max-content",
+                fontSize: "16px",
+                lineHeight: "26px",
+              }
+        }
+      >
+        <AlertTitle>정보</AlertTitle>
+        '상세' 열의 검색 버튼을 통해 세부 결과를 확인할 수 있습니다.
+        <br />
+        '필터' 버튼 & 각 행의 제목을 클릭하여 원하시는 스타일로 채점 결과를 확인
+        가능합니다.
+      </Alert>
+      `
       <S.TableWrapper>
         {isLoading ? (
           <CircularProgress />
@@ -214,21 +235,38 @@ export default function ScoreInsights() {
               disableColumnMenu
               // disableColumnFilter
               showColumnVerticalBorder
+              initialState={{
+                sorting: {
+                  sortModel: [{ field: "createdAt", sort: "asc" }],
+                },
+              }}
               slots={{
                 toolbar: CustomDataGridToolBar,
+                noRowsOverlay: CustomNoRowsOverlay,
               }}
               showCellVerticalBorder
               sx={{
                 boxShadow: 2,
+                "& .MuiDataGrid-cell": {
+                  fontSize: isMobile ? "10px" : "14px",
+                },
                 "& .MuiDataGrid-cell:hover": {
                   color: "primary.main",
                 },
                 "& .table-header": {
                   backgroundColor: "#eeeeee",
-                  fontSize: "16px",
+                  borderTop: "1px solid rgba(224, 224, 224, 1)",
+                  fontSize: isMobile ? "12px" : "16px",
                 },
                 "& .table-group-header": {
-                  fontSize: "20px",
+                  fontSize: isMobile ? "14px" : "20px",
+                  borderBottom: "1px solid white",
+                  borderTop: "1px solid rgba(224, 224, 224, 1)",
+                },
+                "& .table-header-info": {
+                  backgroundColor: "#ffffff",
+                  borderTop: "1px solid rgba(224, 224, 224, 1)",
+                  fontSize: isMobile ? "12px" : "16px",
                 },
               }}
             />

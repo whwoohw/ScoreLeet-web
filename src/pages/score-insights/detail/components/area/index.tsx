@@ -6,8 +6,8 @@ import {
   languageExamReports,
   reasoningExamReports,
 } from "@/data/scoreInsights";
-import * as S from "@/pages/score-insights/components/area-insights/area-insights.styled";
-import { LeetYears, QuestionTypes } from "@/types/leetAnswers";
+import * as S from "@/pages/score-insights/detail/components/area/area.styled";
+import { QuestionTypes } from "@/types/leetAnswers";
 import { ScoreInsightsData } from "@/types/scoreInsights";
 import {
   calculateAreaScores,
@@ -16,32 +16,30 @@ import {
 import { useState } from "react";
 
 interface ScoreInsightsAreaInsightsProps {
-  leetYear: LeetYears;
   scoreInsights: ScoreInsightsData;
 }
 
 export default function ScoreInsightsAreaInsights({
-  leetYear,
   scoreInsights,
 }: ScoreInsightsAreaInsightsProps) {
   const [questionType, setQuestionType] = useState<QuestionTypes>("language");
 
   const languageAreaScore = calculateAreaScores({
-    area: languageExamReports[leetYear].odd.area,
-    answers: language[leetYear].odd,
+    area: languageExamReports[scoreInsights.year].odd.area,
+    answers: language[scoreInsights.year].odd,
     answerInputs:
-      scoreInsights.language?.slice(-1)[0].answers ??
-      language[leetYear].odd.map(() => {
+      scoreInsights.language?.answers ??
+      language[scoreInsights.year].odd.map(() => {
         return null;
       }),
   });
 
   const reasoningAreaScore = calculateAreaScores({
-    area: reasoningExamReports[leetYear].odd.area,
-    answers: reasoning[leetYear].odd,
+    area: reasoningExamReports[scoreInsights.year].odd.area,
+    answers: reasoning[scoreInsights.year].odd,
     answerInputs:
-      scoreInsights.reasoning?.slice(-1)[0].answers ??
-      reasoning[leetYear].odd.map(() => {
+      scoreInsights.reasoning?.answers ??
+      reasoning[scoreInsights.year].odd.map(() => {
         return null;
       }),
   });

@@ -10,7 +10,9 @@ import { GlobalStyles } from "./styles/globalstyles";
 import AdminPage from "./pages/admin";
 import ScoreInsightsDetail from "./pages/score-insights/detail";
 import ScoreInsights from "./pages/score-insights";
-import Test from "./pages/test";
+import UserTest from "./pages/user-test";
+import Scoring from "./pages/scoring";
+import ProtectedRoute from "./components/protected-route";
 
 const router = createBrowserRouter([
   {
@@ -22,21 +24,38 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
+        path: "scoring",
+        element: <Scoring />,
+      },
+      {
         path: "score-insights",
+
         children: [
           {
             path: "",
-            element: <ScoreInsights />,
+            element: (
+              <ProtectedRoute>
+                <ScoreInsights />
+              </ProtectedRoute>
+            ),
           },
           {
             path: "detail",
-            element: <ScoreInsightsDetail />,
+            element: (
+              <ProtectedRoute>
+                <ScoreInsightsDetail />
+              </ProtectedRoute>
+            ),
           },
         ],
       },
       {
-        path: "test",
-        element: <Test />,
+        path: "user-test",
+        element: (
+          <ProtectedRoute>
+            <UserTest />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "admin",

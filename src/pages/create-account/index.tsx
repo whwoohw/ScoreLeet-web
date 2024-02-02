@@ -155,7 +155,7 @@ export default function CreateAccount() {
         createdAt: Timestamp.now(),
       });
 
-      await setDoc(doc(db, "scoreInsights", credentials.user.uid), {});
+      await setDoc(doc(db, "userTests", credentials.user.uid), {});
 
       window.alert("회원가입이 완료되었습니다.");
 

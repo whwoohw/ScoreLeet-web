@@ -7,7 +7,7 @@ interface ScoreInsightsTableWrapperProps {
 }
 
 export const ScoreInsightsTableWrapper = styled.div<ScoreInsightsTableWrapperProps>`
-  width: ${(props) => `${props.content * 16}%`};
+  width: 100%;
   height: ${(props) => `${props.height}px`};
   display: grid;
 

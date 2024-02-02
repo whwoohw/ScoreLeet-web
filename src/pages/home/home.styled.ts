@@ -1,19 +1,15 @@
-import { media } from "@/styles/media";
 import styled from "styled-components";
 
 export const Wrapper = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
-  gap: 40px;
+  justify-content: center;
 `;
 
-export const SelectGroupContainer = styled.div`
+export const ButtonContainer = styled.div`
+  width: 50%;
   display: flex;
   flex-direction: row;
-  gap: 50px;
-
-  ${media.mobile(`
-    gap: 15px;
-  `)}
+  justify-content: space-between;
+  margin-top: 100px;
 `;

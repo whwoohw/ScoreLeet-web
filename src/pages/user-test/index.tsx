@@ -1,14 +1,16 @@
-import { handleUserTestSubmission } from "@/api/test";
+import { handleUserTestSubmission } from "@/api/user-test";
 import { language, leetYearsData, reasoning } from "@/data/leetAnswers";
 import { languageScore, reasoningScore } from "@/data/leetScores";
 import { useAuth } from "@/hooks/contextHooks";
-import * as S from "@/pages/test/test.styled";
+import * as S from "@/pages/user-test/user-test.styled";
 import { LeetYears } from "@/types/leetAnswers";
 import {
   countMatchingElements,
   getScoreAdditionalInfos,
 } from "@/utils/answerTable";
 import {
+  Alert,
+  AlertTitle,
   Button,
   FormControl,
   InputLabel,
@@ -20,7 +22,7 @@ import {
 import { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function Test() {
+export default function UserTest() {
   const { currentUser } = useAuth();
   const isMobile = useMediaQuery("(max-width: 600px)");
   const navigate = useNavigate();
@@ -97,71 +99,98 @@ export default function Test() {
     if (!currentUser) {
       return;
     }
-    const languageWithoutUndefined = languageAnswerInputs.map((item) =>
-      item === undefined ? null : item
-    );
-    const reasoningWithoutUndefined = reasoningAnswerInputs.map((item) =>
-      item === undefined ? null : item
-    );
+    if (window.confirm("시험을 제출하시겠습니까?")) {
+      const languageWithoutUndefined = languageAnswerInputs.map((item) =>
+        item === undefined ? null : item
+      );
+      const reasoningWithoutUndefined = reasoningAnswerInputs.map((item) =>
+        item === undefined ? null : item
+      );
 
-    const updatedLanguageAnswerInputs = Array.from(
-      { length: languageAnswers.length },
-      (_, index) => languageWithoutUndefined[index] || null
-    );
+      const updatedLanguageAnswerInputs = Array.from(
+        { length: languageAnswers.length },
+        (_, index) => languageWithoutUndefined[index] || null
+      );
 
-    const languageScore = countMatchingElements(
-      updatedLanguageAnswerInputs,
-      languageAnswers
-    );
-    const languageStandardScore = getScoreAdditionalInfos(
-      languageScores,
-      languageScore,
-      "standardScore"
-    );
-    const languagePercentile = getScoreAdditionalInfos(
-      languageScores,
-      languageScore,
-      "percentile"
-    );
+      const languageScore = countMatchingElements(
+        updatedLanguageAnswerInputs,
+        languageAnswers
+      );
+      const languageStandardScore = getScoreAdditionalInfos(
+        languageScores,
+        languageScore,
+        "standardScore"
+      );
+      const languagePercentile = getScoreAdditionalInfos(
+        languageScores,
+        languageScore,
+        "percentile"
+      );
 
-    const updatedReasoningAnswerInputs = Array.from(
-      { length: reasoningAnswers.length },
-      (_, index) => reasoningWithoutUndefined[index] || null
-    );
+      const updatedReasoningAnswerInputs = Array.from(
+        { length: reasoningAnswers.length },
+        (_, index) => reasoningWithoutUndefined[index] || null
+      );
 
-    const reasoningScore = countMatchingElements(
-      updatedReasoningAnswerInputs,
-      reasoningAnswers
-    );
-    const reasoningStandardScore = getScoreAdditionalInfos(
-      reasoningScores,
-      reasoningScore,
-      "standardScore"
-    );
-    const reasoningPercentile = getScoreAdditionalInfos(
-      reasoningScores,
-      reasoningScore,
-      "percentile"
-    );
+      const reasoningScore = countMatchingElements(
+        updatedReasoningAnswerInputs,
+        reasoningAnswers
+      );
+      const reasoningStandardScore = getScoreAdditionalInfos(
+        reasoningScores,
+        reasoningScore,
+        "standardScore"
+      );
+      const reasoningPercentile = getScoreAdditionalInfos(
+        reasoningScores,
+        reasoningScore,
+        "percentile"
+      );
 
-    handleUserTestSubmission({
-      currentUser,
-      leetYear,
-      languageAnswerInputs,
-      languageScore,
-      languageStandardScore,
-      languagePercentile,
-      reasoningAnswerInputs,
-      reasoningScore,
-      reasoningStandardScore,
-      reasoningPercentile,
-      navigate,
-    });
+      handleUserTestSubmission({
+        currentUser,
+        leetYear,
+        languageAnswerInputs,
+        languageScore,
+        languageStandardScore,
+        languagePercentile,
+        reasoningAnswerInputs,
+        reasoningScore,
+        reasoningStandardScore,
+        reasoningPercentile,
+        navigate,
+      });
+    }
   };
 
   return (
     <S.Wrapper>
-      <FormControl sx={{ m: 1, width: 200 }}>
+      <Alert
+        severity="info"
+        sx={
+          isMobile
+            ? {
+                marginTop: "10px",
+                width: "100%",
+                height: "max-content",
+                fontSize: "10.5px",
+                lineHeight: "16px",
+              }
+            : {
+                marginTop: "30px",
+                display: "flex",
+                width: "max-content",
+                fontSize: "14px",
+                lineHeight: "26px",
+              }
+        }
+      >
+        <AlertTitle>정보</AlertTitle>
+        이 페이지에서 제출하는 채점 정보는 '내 성적분석'에서 확인할 수 있습니다.
+        <br />
+        성적분석을 원하시지 않는다면, 로그아웃 후 기존 페이지를 사용해주세요!
+      </Alert>
+      <FormControl sx={{ m: 1, width: 150 }}>
         <InputLabel id="select-label">시험년도</InputLabel>
         <Select
           labelId="select-label"
@@ -223,17 +252,19 @@ export default function Test() {
         </S.TableContainer>
       </S.TableWrapper>
 
-      <Button
-        variant="contained"
-        sx={
-          isMobile
-            ? { width: "90px", height: "32px", fontSize: "10px" }
-            : { width: "120px", height: "45px" }
-        }
-        onClick={handleSubmit}
-      >
-        {"시험 제출하기"}
-      </Button>
+      <S.ButtonWrapper>
+        <Button
+          variant="contained"
+          sx={
+            isMobile
+              ? { width: "100px", height: "32px", fontSize: "10px" }
+              : { width: "150px", height: "45px" }
+          }
+          onClick={handleSubmit}
+        >
+          {"시험 제출하기"}
+        </Button>
+      </S.ButtonWrapper>
     </S.Wrapper>
   );
 }

@@ -66,10 +66,8 @@ export default function ScoreInsightsCumulative(
             width={500}
             data={Array.from({ length: 3 }, (_, index) => ({
               name: `${index + 1}회차`,
-              language:
-                scoreInsights.language?.[index]?.[displayScoreType] ?? 0,
-              reasoning:
-                scoreInsights.reasoning?.[index]?.[displayScoreType] ?? 0,
+              language: scoreInsights.language?.[displayScoreType] ?? 0,
+              reasoning: scoreInsights.reasoning?.[displayScoreType] ?? 0,
             }))}
             margin={{ top: 20, right: 35, bottom: 10, left: 5 }}
           >

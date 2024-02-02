@@ -2,19 +2,19 @@ import { Timestamp } from "firebase/firestore";
 import { LeetTypes, LeetYears, QuestionTypes } from "./leetAnswers";
 
 export interface ScoreInsights {
-  id: string;
   score: number;
   standardScore: number;
   percentile: number;
   answers: (number | null)[];
-  questionType: QuestionTypes;
-  leetType: LeetTypes;
-  createdAt: Timestamp;
 }
 
 export type ScoreType = "score" | "standardScore" | "percentile";
 
-export type ScoreInsightsData = Record<QuestionTypes, ScoreInsights[]>;
+export type ScoreInsightsData = Record<QuestionTypes, ScoreInsights> & {
+  id: string;
+  createdAt: Timestamp;
+  year: LeetYears;
+};
 
 export type ScoreInsightsAreaData = Record<
   QuestionArea,
@@ -60,13 +60,7 @@ export interface UserAnswersData {
   id: string;
   year: LeetYears;
   index: number;
-  language: Omit<
-    ScoreInsights,
-    "id" | "createdAt" | "questionType" | "leetType"
-  >;
-  reasoning: Omit<
-    ScoreInsights,
-    "id" | "createdAt" | "questionType" | "leetType"
-  >;
+  language: ScoreInsights;
+  reasoning: ScoreInsights;
   createdAt: Timestamp;
 }

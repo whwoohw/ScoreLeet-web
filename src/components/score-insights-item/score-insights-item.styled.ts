@@ -22,10 +22,4 @@ export const ScoreInsightsContainer = styled.div`
   margin-top: 20px;
   width: 100%;
   display: flex;
-  flex-direction: row;
-  gap: 50px;
-
-  ${media.mobile(`
-    flex-direction: column;
-  `)}
 `;

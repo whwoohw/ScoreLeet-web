@@ -1,16 +1,17 @@
-import { LeetYears } from "@/types/leetAnswers";
-import {
-  ScoreInsights,
-  ScoreInsightsData,
-  UserAnswersData,
-} from "@/types/scoreInsights";
+import { ScoreInsightsData, UserAnswersData } from "@/types/scoreInsights";
 import { db } from "@/utils/firebase";
 import { User } from "firebase/auth";
-import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import {
+  collection,
+  doc,
+  getDoc,
+  getDocs,
+  orderBy,
+  query,
+} from "firebase/firestore";
 
 export const getUserAnswers = async (
   currentUser: User,
-  leetYear: LeetYears,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
   setAnswers: React.Dispatch<
     React.SetStateAction<UserAnswersData[] | undefined>
@@ -18,7 +19,8 @@ export const getUserAnswers = async (
 ) => {
   setLoading(true);
   const answersQuery = query(
-    collection(db, "userTests", currentUser.uid, leetYear)
+    collection(db, "userTests", currentUser.uid, "scoreInsights"),
+    orderBy("createdAt")
   );
 
   const querySnapshot = await getDocs(answersQuery);
@@ -27,35 +29,30 @@ export const getUserAnswers = async (
     ...(doc.data() as UserAnswersData),
     index: index + 1,
     id: doc.id,
-    year: leetYear,
   }));
 
   setAnswers(data);
   setLoading(false);
 };
 
-export const getScoreInsights = async (
+export const getScoreInsight = async (
   currentUser: User,
-  leetYear: LeetYears,
+  id: string,
   setScoreInsight: React.Dispatch<
     React.SetStateAction<ScoreInsightsData | undefined>
   >,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>
 ) => {
   setLoading(true);
-  const scoreInsightsQuery = query(
-    collection(db, "scoreInsights", currentUser.uid, leetYear),
-    orderBy("createdAt")
+
+  const querySnapshot = await getDoc(
+    doc(db, "userTests", currentUser.uid, "scoreInsights", id)
   );
 
-  const querySnapshot = await getDocs(scoreInsightsQuery);
-
-  const data = querySnapshot.docs.reduce((acc: ScoreInsightsData, item) => {
-    const { questionType } = item.data() as ScoreInsights;
-    acc[questionType] = acc[questionType] || [];
-    acc[questionType].push({ ...(item.data() as ScoreInsights), id: item.id });
-    return acc;
-  }, {} as ScoreInsightsData);
+  const data = {
+    ...(querySnapshot.data() as ScoreInsightsData),
+    id: querySnapshot.id,
+  };
 
   setScoreInsight(data);
   setLoading(false);

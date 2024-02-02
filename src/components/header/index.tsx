@@ -36,11 +36,15 @@ export default function Header() {
     <S.Wrapper>
       <S.HeaderTop>
         <Link to="/">
-          <S.Logo>LEET 기출 채점</S.Logo>
+          <S.Logo>Score Leet</S.Logo>
         </Link>
         {currentUser ? (
           <S.HeaderLinkList>
-            <Link to="/score-insight">
+            <Link to="/user-test">
+              <S.HeaderLinkItem>채점</S.HeaderLinkItem>
+            </Link>
+            <S.Separator> | </S.Separator>
+            <Link to="/score-insights">
               <S.HeaderLinkItem>내 성적분석</S.HeaderLinkItem>
             </Link>
             <S.Separator> | </S.Separator>

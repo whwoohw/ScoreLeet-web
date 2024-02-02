@@ -17,7 +17,3 @@ export const SelectGroupContainer = styled.div`
     gap: 15px;
   `)}
 `;
-
-export const TableWrapper = styled.div`
-  display: flex;
-`;

@@ -9,5 +9,5 @@ export const registerUser = async (data: UserCredential) => {
     createdAt: Timestamp.now(),
   });
 
-  await setDoc(doc(db, "scoreInsights", data.user.uid), {});
+  await setDoc(doc(db, "userTests", data.user.uid), {});
 };

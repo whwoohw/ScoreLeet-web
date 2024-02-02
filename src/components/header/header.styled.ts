@@ -26,20 +26,24 @@ export const HeaderTop = styled.div`
 `;
 
 export const Logo = styled.h3`
-  font-size: 30px;
   color: black;
+  font-weight: bold;
+  /* font-family: Georgia, serif; */
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  font-style: oblique;
+  font-size: 35px;
 `;
 
 export const HeaderLinkList = styled.div`
   display: flex;
   flex-direction: row;
-  gap: 10px;
+  gap: 20px;
   align-items: center;
 `;
 
 export const HeaderLinkItem = styled.p`
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 16px;
+  line-height: 24px;
   color: black;
   &:hover {
     color: #577dd0;

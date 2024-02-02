@@ -174,8 +174,12 @@ export function ScoreInsightsAreaTable({
 
 export const CustomDataGridToolBar = () => {
   return (
-    <GridToolbarContainer sx={{ width: "150px" }}>
-      <GridToolbarFilterButton sx={{ width: "100%" }} />
+    <GridToolbarContainer sx={{ width: "120px", height: "50px" }}>
+      <GridToolbarFilterButton sx={{ width: "100%", height: "100%" }} />
     </GridToolbarContainer>
   );
+};
+
+export const CustomNoRowsOverlay = () => {
+  return <h3>제출한 시험 결과가 없습니다.</h3>;
 };
