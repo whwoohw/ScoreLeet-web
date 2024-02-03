@@ -85,13 +85,19 @@ export default function Home() {
         </Alert>
 
         <Fab
-          sx={{ zIndex: 1, width: "140px" }}
+          sx={
+            isMobile
+              ? { zIndex: 1, width: "140px", fontSize: "9px" }
+              : { zIndex: 1, width: "140px" }
+          }
           variant="extended"
           size="medium"
           color="primary"
           onClick={handleClickFab}
         >
-          <ArrowBackIcon sx={{ mr: 1 }} />
+          <ArrowBackIcon
+            sx={isMobile ? { mr: 1, fontSize: "9px" } : { mr: 1 }}
+          />
           확인하러가기
         </Fab>
       </S.AlertWrapper>

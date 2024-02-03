@@ -64,23 +64,23 @@ export default function Header() {
                   ? {
                       backgroundColor: "#4285f4",
                       height: "30px",
-                      padding: "10px 7px",
+                      padding: "10px",
                     }
                   : {
                       backgroundColor: "#4285f4",
                       height: "45px",
-                      padding: "10px 7px",
+                      padding: "10px",
                     }
               }
               startIcon={
                 isMobile ? (
                   <GoogleLoginImage style={{ width: 20, height: 20 }} />
                 ) : (
-                  <GoogleLoginImage style={{ width: 40, height: 40 }} />
+                  <GoogleLoginImage style={{ width: 36, height: 36 }} />
                 )
               }
             >
-              구글 계정으로 로그인
+              {isMobile ? "구글 로그인" : "구글 계정으로 로그인"}
             </Button>
           </S.HeaderLinkList>
         )}
