@@ -3,20 +3,10 @@ import styled from "styled-components";
 
 export const Wrapper = styled.div`
   width: 100%;
-  height: 60px;
+  height: 100px;
+  padding: 0 10% 100px 10%;
 
   ${media.mobile(`
-  height: 40px;
+    padding: 0 3%;
   `)}
-  display: flex;
-  flex-grow: 1;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  /* border-top: 1px solid #bdbdbd; */
-  padding: 20px 10%;
-`;
-
-export const Info = styled.p`
-  font-size: 14px;
 `;
