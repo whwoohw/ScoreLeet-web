@@ -91,7 +91,7 @@ export default function Home() {
               : { zIndex: 1, width: "140px" }
           }
           variant="extended"
-          size="medium"
+          size={isMobile ? "small" : "medium"}
           color="primary"
           onClick={handleClickFab}
         >

@@ -4,6 +4,7 @@ import {
   FormLabel,
   Radio,
   RadioGroup,
+  useMediaQuery,
 } from "@mui/material";
 
 interface CustomRadioGroup {
@@ -28,13 +29,17 @@ export default function CustomRadioGroup({
   changeRadio,
   radioItems,
 }: CustomRadioGroup) {
+  const isMobile = useMediaQuery("(max-width: 600px)");
+
   return (
     <FormControl>
       <FormLabel
         sx={
-          !disabled
-            ? { fontSize: "18px", fontWeight: "bold", color: "black" }
-            : null
+          disabled
+            ? null
+            : isMobile
+            ? { fontSize: "14px", fontWeight: "bold", color: "black" }
+            : { fontSize: "18px", fontWeight: "bold", color: "black" }
         }
         id="radio-label"
       >
@@ -49,10 +54,16 @@ export default function CustomRadioGroup({
       >
         {radioItems.map((item, i) => (
           <FormControlLabel
+            sx={{ fontSize: "2px" }}
             key={i}
             disabled={disabled}
             value={item.value}
-            control={<Radio />}
+            control={
+              <Radio
+                size={isMobile ? "small" : "medium"}
+                sx={{ padding: "6px" }}
+              />
+            }
             label={item.label}
           />
         ))}

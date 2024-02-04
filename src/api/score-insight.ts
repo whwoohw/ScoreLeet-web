@@ -1,20 +1,30 @@
-import { ScoreInsightsData, UserAnswersData } from "@/types/scoreInsights";
+import { leetYearsData } from "@/data/leetAnswers";
+import {
+  ScoreInsightsData,
+  UserAnswersData,
+  UserChartScores,
+} from "@/types/scoreInsights";
 import { db } from "@/utils/firebase";
+
 import { User } from "firebase/auth";
 import {
   collection,
+  deleteDoc,
   doc,
   getDoc,
-  getDocs,
+  onSnapshot,
   orderBy,
   query,
 } from "firebase/firestore";
 
-export const getUserAnswers = async (
+export const getUserAnswers = (
   currentUser: User,
   setLoading: React.Dispatch<React.SetStateAction<boolean>>,
-  setAnswers: React.Dispatch<
+  setAnswersData: React.Dispatch<
     React.SetStateAction<UserAnswersData[] | undefined>
+  >,
+  setChartScoresData: React.Dispatch<
+    React.SetStateAction<UserChartScores | undefined>
   >
 ) => {
   setLoading(true);
@@ -23,16 +33,57 @@ export const getUserAnswers = async (
     orderBy("createdAt")
   );
 
-  const querySnapshot = await getDocs(answersQuery);
+  const unsubscribe = onSnapshot(answersQuery, (snapshot) => {
+    const userAnswersData = snapshot.docs.map((doc, index) => ({
+      ...(doc.data() as UserAnswersData),
+      index: index + 1,
+      id: doc.id,
+    }));
+    setAnswersData(userAnswersData);
 
-  const data = querySnapshot.docs.map((doc, index) => ({
-    ...(doc.data() as UserAnswersData),
-    index: index + 1,
-    id: doc.id,
-  }));
+    const userChartScores = {} as UserChartScores;
 
-  setAnswers(data);
-  setLoading(false);
+    leetYearsData.forEach((leetYear) => {
+      const matchingDocs = snapshot.docs.filter(
+        (doc) => doc.data().year === leetYear
+      );
+      if (matchingDocs.length > 0) {
+        userChartScores[leetYear] = matchingDocs.map((doc) => {
+          const { year, language, reasoning } = doc.data();
+
+          return {
+            year,
+            id: doc.id,
+            languageScore: language.score,
+            languageStandardScore: language.standardScore,
+            languagePercentile: language.percentile,
+            reasoningScore: reasoning.score,
+            reasoningStandardScore: reasoning.standardScore,
+            reasoningPercentile: reasoning.percentile,
+          };
+        });
+      } else {
+        userChartScores[leetYear] = [];
+      }
+    });
+
+    setChartScoresData(userChartScores);
+
+    setLoading(false);
+  });
+
+  return () => {
+    unsubscribe();
+  };
+};
+
+// setLoading??
+export const deleteUserAnswer = async (id: string, uid: string) => {
+  try {
+    await deleteDoc(doc(db, "userTests", uid, "scoreInsights", id));
+  } catch (e) {
+    console.log(e);
+  }
 };
 
 export const getScoreInsight = async (

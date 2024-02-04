@@ -1,4 +1,5 @@
 import * as S from "@/components/score-insights-chart/score-insights-chart.styled";
+import { RadarChartData } from "@/types/scoreInsights";
 import { getChartToolTipLabel } from "@/utils/scoreInsights";
 import {
   PolarAngleAxis,
@@ -89,7 +90,7 @@ export const CustomTooltip = ({
   return null;
 };
 
-export const CustomRadarChart = ({ data }: { data: any[] }) => {
+export const CustomRadarChart = ({ data }: { data: RadarChartData[] }) => {
   return (
     <ResponsiveContainer width="100%" height="100%">
       <RadarChart cx="50%" cy="50%" outerRadius="65%" data={data}>

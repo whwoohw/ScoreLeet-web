@@ -64,3 +64,21 @@ export interface UserAnswersData {
   reasoning: ScoreInsights;
   createdAt: Timestamp;
 }
+
+export interface RadarChartData {
+  name: string;
+  value: string;
+}
+
+export interface YearScoreChartData {
+  year: LeetYears;
+  id: string;
+  languageScore: number;
+  languageStandardScore: number;
+  languagePercentile: number;
+  reasoningScore: number;
+  reasoningStandardScore: number;
+  reasoningPercentile: number;
+}
+
+export type UserChartScores = Record<LeetYears, YearScoreChartData[] | []>;
