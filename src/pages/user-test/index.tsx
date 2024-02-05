@@ -4,6 +4,7 @@ import { languageScore, reasoningScore } from "@/data/leetScores";
 import { useAuth } from "@/hooks/contextHooks";
 import * as S from "@/pages/user-test/user-test.styled";
 import { LeetYears } from "@/types/leetAnswers";
+import { UserTestScore } from "@/types/scoreInsights";
 import {
   countMatchingElements,
   getScoreAdditionalInfos,
@@ -14,10 +15,14 @@ import {
   AlertTitle,
   Button,
   FormControl,
+  FormControlLabel,
+  InputAdornment,
   InputLabel,
   MenuItem,
+  OutlinedInput,
   Select,
   SelectChangeEvent,
+  Switch,
   useMediaQuery,
 } from "@mui/material";
 import { logEvent } from "firebase/analytics";
@@ -30,6 +35,8 @@ export default function UserTest() {
   const navigate = useNavigate();
 
   const [leetYear, setLeetYear] = useState<LeetYears>("2024");
+  const [isSwitchChecked, setSwitchChecked] = useState(false);
+  const [scores, setScores] = useState<UserTestScore>();
 
   const languageAnswers = language[leetYear].odd;
   const languageScores = languageScore[leetYear];
@@ -97,8 +104,8 @@ export default function UserTest() {
     }
   };
 
-  const handleSubmit = () => {
-    logEvent(analytics, `user_tests_submit_button`);
+  const handleSubmitAnswers = () => {
+    logEvent(analytics, `user_tests_submit_answer_button`);
     if (!currentUser) {
       return;
     }
@@ -159,6 +166,59 @@ export default function UserTest() {
         languagePercentile,
         reasoningAnswerInputs,
         reasoningScore,
+        reasoningStandardScore,
+        reasoningPercentile,
+        navigate,
+      });
+    }
+  };
+
+  const handleChangeScore = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setScores({ ...(scores as UserTestScore), [name]: value });
+  };
+
+  const handleSubmitScore = () => {
+    logEvent(analytics, `user_tests_submit_score_button`);
+    if (!currentUser) {
+      return;
+    }
+    if (!scores || scores.language > 35 || scores.reasoning > 40) {
+      return alert("점수를 정확히 입력해주세요!");
+    }
+
+    if (window.confirm("점수를 제출하시겠습니까?")) {
+      const languageStandardScore = getScoreAdditionalInfos(
+        languageScores,
+        scores.language,
+        "standardScore"
+      );
+      const languagePercentile = getScoreAdditionalInfos(
+        languageScores,
+        scores.language,
+        "percentile"
+      );
+
+      const reasoningStandardScore = getScoreAdditionalInfos(
+        reasoningScores,
+        scores.reasoning,
+        "standardScore"
+      );
+      const reasoningPercentile = getScoreAdditionalInfos(
+        reasoningScores,
+        scores.reasoning,
+        "percentile"
+      );
+
+      handleUserTestSubmission({
+        currentUser,
+        leetYear,
+        languageAnswerInputs: [],
+        languageScore: scores.language,
+        languageStandardScore,
+        languagePercentile,
+        reasoningAnswerInputs: [],
+        reasoningScore: scores.reasoning,
         reasoningStandardScore,
         reasoningPercentile,
         navigate,
@@ -228,9 +288,78 @@ export default function UserTest() {
                 }
           }
         >
-          성적분석은 홀수형 문제만 채점이 가능합니다!
+          <AlertTitle>주의</AlertTitle>
+          성적분석은 홀수형 문제만 채점이 가능합니다. <br />
+          성적만 입력하기를 통해 제출시, 문항별 분석은 불가능합니다.
         </Alert>
       </S.SelectContainer>
+
+      <FormControl>
+        <FormControlLabel
+          control={
+            <Switch
+              checked={isSwitchChecked}
+              onChange={() => setSwitchChecked((prev) => !prev)}
+            />
+          }
+          label="원점수만 입력하기"
+        />
+      </FormControl>
+
+      {isSwitchChecked && (
+        <S.ScoreInputFormContainer>
+          <S.InputContainer>
+            <S.InputWrapper>
+              <S.InputTitle>언어이해 : </S.InputTitle>
+              <FormControl
+                sx={isMobile ? { width: "100px" } : { width: "120px" }}
+                variant="outlined"
+              >
+                <OutlinedInput
+                  size="small"
+                  name="language"
+                  value={scores?.language}
+                  onChange={handleChangeScore}
+                  endAdornment={
+                    <InputAdornment position="end">점</InputAdornment>
+                  }
+                />
+              </FormControl>
+            </S.InputWrapper>
+
+            <S.InputWrapper>
+              <S.InputTitle>추리논증 : </S.InputTitle>
+              <FormControl
+                sx={isMobile ? { width: "100px" } : { width: "120px" }}
+                variant="outlined"
+              >
+                <OutlinedInput
+                  name="reasoning"
+                  size="small"
+                  value={scores?.reasoning}
+                  onChange={handleChangeScore}
+                  endAdornment={
+                    <InputAdornment position="end">점</InputAdornment>
+                  }
+                />
+              </FormControl>
+            </S.InputWrapper>
+          </S.InputContainer>
+          <S.ButtonWrapper>
+            <Button
+              variant="contained"
+              sx={
+                isMobile
+                  ? { width: "90px", height: "28px", fontSize: "10px" }
+                  : { width: "120px", height: "40px" }
+              }
+              onClick={handleSubmitScore}
+            >
+              점수 제출하기
+            </Button>
+          </S.ButtonWrapper>
+        </S.ScoreInputFormContainer>
+      )}
 
       <S.TableWrapper>
         <S.TableTitleContainer>
@@ -286,7 +415,7 @@ export default function UserTest() {
               ? { width: "100px", height: "32px", fontSize: "10px" }
               : { width: "150px", height: "45px" }
           }
-          onClick={handleSubmit}
+          onClick={handleSubmitAnswers}
         >
           {"시험 제출하기"}
         </Button>

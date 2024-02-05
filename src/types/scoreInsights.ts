@@ -82,3 +82,8 @@ export interface YearScoreChartData {
 }
 
 export type UserChartScores = Record<LeetYears, YearScoreChartData[] | []>;
+
+export interface UserTestScore {
+  language: number;
+  reasoning: number;
+}

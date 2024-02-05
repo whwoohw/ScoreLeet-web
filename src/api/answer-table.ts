@@ -25,7 +25,6 @@ export const handleAnswerSubmission = async ({
           createdAt: Timestamp.now(),
         }
       );
-      console.log("success");
     } catch (e) {
       console.log(e);
     } finally {
@@ -80,8 +79,6 @@ export const handleUserAnswerSubmission = async ({
         createdAt: Timestamp.now(),
       }
     );
-
-    console.log("user success");
   } catch (e) {
     console.log(e);
   } finally {

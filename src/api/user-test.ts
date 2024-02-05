@@ -35,8 +35,6 @@ export const handleUserTestSubmission = async ({
         createdAt: Timestamp.now(),
       }
     );
-
-    console.log("user success");
   } catch (e) {
     console.log(e);
   } finally {

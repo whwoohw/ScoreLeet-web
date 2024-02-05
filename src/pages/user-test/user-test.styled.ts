@@ -158,3 +158,34 @@ export const ButtonWrapper = styled.div`
   gap: 20px
   `)}
 `;
+
+export const ScoreInputFormContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+
+  ${media.mobile(`
+  width: 100%;
+  `)}
+`;
+
+export const InputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+`;
+
+export const InputWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+`;
+
+export const InputTitle = styled.p`
+  font-size: 20px;
+  font-weight: bold;
+  ${media.mobile(`
+    font-size: 15px;
+  `)}
+`;

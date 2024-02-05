@@ -31,8 +31,6 @@ export default function ScoreInsightsDetail() {
     }
   }, [currentUser, id]);
 
-  console.log(scoreInsights);
-
   return (
     <S.Wrapper>
       {isLoading ? (
