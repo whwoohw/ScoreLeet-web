@@ -105,14 +105,14 @@ export default function ScoreInsightsChart({
             ]}
           />
           <Line
-            type="monotone"
+            connectNulls
             dataKey={`language${capitalizeFirstLetter(scoreType)}`}
             stroke="#8884d8"
             strokeWidth={3}
             activeDot={{ r: 6 }}
           />
           <Line
-            type="monotone"
+            connectNulls
             dataKey={`reasoning${capitalizeFirstLetter(scoreType)}`}
             stroke="#82ca9d"
             strokeWidth={3}

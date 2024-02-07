@@ -108,7 +108,7 @@ export function ScoreInsightsScoreTable({
       <S.ScoreInsightsTableItemBody
         style={{ backgroundColor: "#eeeeee", fontStyle: "italic" }}
       >
-        {(languageAverage + reasoningAverage).toFixed(2)}점
+        {(languageAverage + reasoningAverage).toFixed(1)}점
       </S.ScoreInsightsTableItemBody>
     </S.ScoreInsightsTableWrapper>
   );

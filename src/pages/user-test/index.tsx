@@ -175,7 +175,7 @@ export default function UserTest() {
 
   const handleChangeScore = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setScores({ ...(scores as UserTestScore), [name]: value });
+    setScores({ ...(scores as UserTestScore), [name]: parseInt(value) });
   };
 
   const handleSubmitScore = () => {

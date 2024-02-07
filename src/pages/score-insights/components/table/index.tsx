@@ -190,8 +190,10 @@ export default function ScoreInsightsTable({
         type: "number",
         width: isMobile ? 60 : 100,
         valueGetter: (params: GridValueGetterParams) =>
-          params.row.reasoning.standardScore +
-          params.row.language.standardScore,
+          (
+            params.row.reasoning.standardScore +
+            params.row.language.standardScore
+          ).toFixed(1),
         valueFormatter: (params: GridValueFormatterParams<number>) => {
           if (params.value === 0) {
             return "N/A";
